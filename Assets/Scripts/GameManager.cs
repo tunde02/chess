@@ -5,15 +5,12 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public Camera mainCamera;
-    public GameObject board;
+    public GameObject square;
 
     private GameObject target;
-    private Square[] squares;
-
-    private void Start()
-    {
-        squares = board.GetComponentsInChildren<Square>();
-    }
+    private GameObject selectedChessPiece;
+    private List<GameObject> selectedSquares = new List<GameObject>();
+    private bool isChessPieceSelected = false;
 
     private void Update()
     {
@@ -21,20 +18,41 @@ public class GameManager : MonoBehaviour
         {
             target = GetClickedObject();
 
-            if (target != null && target.tag == "Chess Piece Element")
+            if(target == null)
             {
-                // write code here
-                Debug.Log("selected!");
-
-                // 작동하는 것 확인
-                squares[10].ChangeToSelectedMaterial();
-                squares[15].ChangeToSelectedMaterial();
+                return;
             }
-            else
+
+            if (target.tag == "Chess Piece Element")
             {
-                Debug.Log("doesn't selected!");
-                squares[10].ChangeToOriginalMaterial();
-                squares[15].ChangeToOriginalMaterial();
+                if (!isChessPieceSelected)
+                {
+                    Debug.Log("selected!");
+
+                    selectedChessPiece = target.transform.parent.gameObject;
+                    isChessPieceSelected = true;
+
+                    selectedSquares.Add(Instantiate(square, new Vector3(2.5f, 0, -3.5f), Quaternion.identity));
+                }
+                else
+                {
+                    selectedChessPiece = null;
+                    isChessPieceSelected = false;
+
+                    RemoveSelectedSquares();
+                }
+            }
+            else if(target.tag == "Board Element")
+            {
+                if (isChessPieceSelected)
+                {
+                    Debug.Log("chess piece move!");
+                    Vector3 destination = new Vector3(target.transform.position.x, 2.0f, target.transform.position.z);
+
+                    StartCoroutine(MoveChessPieceTo(destination));
+                }
+
+                RemoveSelectedSquares();
             }
         }
     }
@@ -52,5 +70,28 @@ public class GameManager : MonoBehaviour
         }
 
         return target;
+    }
+
+    private void RemoveSelectedSquares()
+    {
+        int size = selectedSquares.Count;
+        for(int i=0; i<size; i++)
+        {
+            Destroy(selectedSquares[i]);
+            selectedSquares.Remove(selectedSquares[i]);
+        }
+    }
+
+    private IEnumerator MoveChessPieceTo(Vector3 destination)
+    {
+        selectedChessPiece.GetComponent<Rigidbody>().isKinematic = true;
+
+        while (selectedChessPiece.transform.position.x != destination.x || selectedChessPiece.transform.position.z != destination.z)
+        {
+            selectedChessPiece.transform.position = Vector3.MoveTowards(selectedChessPiece.transform.position, destination, 0.09f);
+            yield return new WaitForSeconds(0f);
+        }
+
+        selectedChessPiece.GetComponent<Rigidbody>().isKinematic = false;
     }
 }
