@@ -36,21 +36,27 @@ public class GameManager : MonoBehaviour
                 }
                 else
                 {
-                    selectedChessPiece = null;
-                    isChessPieceSelected = false;
+                    Debug.Log("already selected");
 
                     RemoveSelectedSquares();
                 }
             }
             else if(target.tag == "Board Element")
             {
+                Debug.Log("board element selected!");
                 if (isChessPieceSelected)
                 {
                     Debug.Log("chess piece move!");
                     Vector3 destination = new Vector3(target.transform.position.x, 2.0f, target.transform.position.z);
 
-                    StartCoroutine(MoveChessPieceTo(destination));
+                    StartCoroutine(MoveChessPieceTo(selectedChessPiece, destination));
                 }
+
+                RemoveSelectedSquares();
+            }
+            else
+            {
+                Debug.Log("something selected!");
 
                 RemoveSelectedSquares();
             }
@@ -75,23 +81,28 @@ public class GameManager : MonoBehaviour
     private void RemoveSelectedSquares()
     {
         int size = selectedSquares.Count;
-        for(int i=0; i<size; i++)
+
+        selectedChessPiece = null;
+        isChessPieceSelected = false;
+
+        for (int i=0; i<size; i++)
         {
             Destroy(selectedSquares[i]);
             selectedSquares.Remove(selectedSquares[i]);
         }
     }
 
-    private IEnumerator MoveChessPieceTo(Vector3 destination)
+    private IEnumerator MoveChessPieceTo(GameObject chessPiece, Vector3 destination)
     {
-        selectedChessPiece.GetComponent<Rigidbody>().isKinematic = true;
+        GameObject _chessPiece = chessPiece;
+        _chessPiece.GetComponent<Rigidbody>().isKinematic = true;
 
-        while (selectedChessPiece.transform.position.x != destination.x || selectedChessPiece.transform.position.z != destination.z)
+        while (_chessPiece.transform.position.x != destination.x || _chessPiece.transform.position.z != destination.z)
         {
-            selectedChessPiece.transform.position = Vector3.MoveTowards(selectedChessPiece.transform.position, destination, 0.09f);
+            _chessPiece.transform.position = Vector3.MoveTowards(_chessPiece.transform.position, destination, 0.09f);
             yield return new WaitForSeconds(0f);
         }
 
-        selectedChessPiece.GetComponent<Rigidbody>().isKinematic = false;
+        _chessPiece.GetComponent<Rigidbody>().isKinematic = false;
     }
 }
