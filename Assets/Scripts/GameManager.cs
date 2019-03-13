@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
 {
     public Camera mainCamera;
 	public GameObject chessBoard;
-
+	
     private GameObject target;
     private ChessPiece selectedChessPiece;
 	private Square[,] squares = new Square[8, 8];

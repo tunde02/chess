@@ -3,8 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum ChessPieceType { Normal, Pawn, Rook, Knight, Bishop, Queen, King }
+
 public class ChessPiece : MonoBehaviour
 {
+	public GameObject[] forms;// 체스말의 종류를 바꿀 때 사용할 배열
+
+	private ChessPieceType type = ChessPieceType.Normal;
+	
 	public void MoveTo(Vector3 destination)
 	{
 		StartCoroutine(StartMoveTo(destination));
@@ -22,5 +28,11 @@ public class ChessPiece : MonoBehaviour
 		}
 
 		GetComponent<Rigidbody>().isKinematic = false;
+	}
+
+	public void ChangeTypeTo(ChessPieceType newType)
+	{
+		type = newType;
+		// 이 체스말을 type에 맞는 체스말로 변경
 	}
 }
