@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
 {
     public Camera mainCamera;
 	public GameObject chessBoard;
+    public GameObject chessPieceClone;
 	
     private GameObject target;
     private ChessPiece selectedChessPiece;
@@ -30,7 +31,22 @@ public class GameManager : MonoBehaviour
 				squares[i, j] = chessBoard.transform.GetChild(index++).gameObject.GetComponent<Square>();
 			}
 		}
+
+        CreateChessPieces();
 	}
+
+    private void CreateChessPieces()
+    {
+        for(int i=0; i<8; i++)
+        {
+            for(int j=0; j<2; j++)
+            {
+                Vector3 temp = squares[j, i].transform.position;
+                Instantiate(chessPieceClone, new Vector3(temp.x, temp.y + 2, temp.z), Quaternion.identity);
+            }
+        }
+        Debug.Log("create done!");
+    }
 
 	private void Update()
     {
@@ -70,8 +86,8 @@ public class GameManager : MonoBehaviour
 				isChessPieceSelected = true;
 
 				// 그 Chess Piece가 이동할 수 있는 Square를 표시
-				squares[3, 3].ChangeToSelectedMaterial();
-				possibleSquares.Add(new Index(3, 3));
+				squares[6, 6].ChangeToSelectedMaterial();
+				possibleSquares.Add(new Index(6, 6));
 			}
 			else
 			{
@@ -87,9 +103,8 @@ public class GameManager : MonoBehaviour
 				if (target.GetComponent<Square>().Status == "selected")
 				{
 					Debug.Log("chess piece move!");
-					Vector3 destination = new Vector3(target.transform.position.x, 2.0f, target.transform.position.z);
 
-					selectedChessPiece.MoveTo(destination);
+					selectedChessPiece.MoveTo(target.transform.position);
 
 					RemoveSelectedSquares();
 				}

@@ -8,6 +8,8 @@ public enum ChessPieceType { Normal, Pawn, Rook, Knight, Bishop, Queen, King }
 public class ChessPiece : MonoBehaviour
 {
 	public GameObject[] forms;// 체스말의 종류를 바꿀 때 사용할 배열
+    public float maxHeight = 3.0f;
+    public float moveSpeed = 0.09f;
 
 	private ChessPieceType type = ChessPieceType.Normal;
 	
@@ -16,17 +18,31 @@ public class ChessPiece : MonoBehaviour
 		StartCoroutine(StartMoveTo(destination));
 	}
 
-	private IEnumerator StartMoveTo(Vector3 destination)
+	private IEnumerator StartMoveTo(Vector3 _destination)
 	{
-		//GameObject _chessPiece = chessPiece;
-		GetComponent<Rigidbody>().isKinematic = true;
+        Vector3 destination = transform.position;
+        destination.y += maxHeight;
 
-		while (transform.position.x != destination.x || transform.position.z != destination.z)
+        GetComponent<Rigidbody>().isKinematic = true;
+
+        // 다른 ChessPiece와의 충돌을 피하기 위해 먼저 위로 올림
+        while (transform.position.y < maxHeight)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, destination, moveSpeed);
+            yield return null;
+        }
+
+        destination.x = _destination.x;
+        destination.z = _destination.z;
+
+        // 목적지로 이동
+        while (transform.position.x != destination.x || transform.position.z != destination.z)
 		{
-			transform.position = Vector3.MoveTowards(transform.position, destination, 0.09f);
-			yield return new WaitForSeconds(0f);
+			transform.position = Vector3.MoveTowards(transform.position, destination, moveSpeed);
+            yield return null;
 		}
 
+        // 물리효과에 의해 자연스럽게 낙하
 		GetComponent<Rigidbody>().isKinematic = false;
 	}
 
