@@ -5,16 +5,22 @@ using UnityEngine;
 
 public class ChessPiece : MonoBehaviour
 {
-    //public IEnumerator MoveChessPieceTo(Vector3 destination)
-    //{
-    //    gameObject.GetComponent<Rigidbody>().isKinematic = true;
+	public void MoveTo(Vector3 destination)
+	{
+		StartCoroutine(StartMoveTo(destination));
+	}
 
-    //    while (transform.position.x != destination.x || transform.position.z != destination.z)
-    //    {
-    //        transform.position = Vector3.MoveTowards(transform.position, destination, 0.09f);
-    //        yield return new WaitForSeconds(0f);
-    //    }
+	private IEnumerator StartMoveTo(Vector3 destination)
+	{
+		//GameObject _chessPiece = chessPiece;
+		GetComponent<Rigidbody>().isKinematic = true;
 
-    //    gameObject.GetComponent<Rigidbody>().isKinematic = false;
-    //}
+		while (transform.position.x != destination.x || transform.position.z != destination.z)
+		{
+			transform.position = Vector3.MoveTowards(transform.position, destination, 0.09f);
+			yield return new WaitForSeconds(0f);
+		}
+
+		GetComponent<Rigidbody>().isKinematic = false;
+	}
 }

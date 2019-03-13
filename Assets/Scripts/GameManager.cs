@@ -2,64 +2,44 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public class Index
+{
+	public int X { get; set; }
+	public int Y { get; set; }
+	public Index(int x, int y) { X = x; Y = y; }
+}
+
 public class GameManager : MonoBehaviour
 {
     public Camera mainCamera;
-    public GameObject square;
+	public GameObject chessBoard;
 
     private GameObject target;
-    private GameObject selectedChessPiece;
-    private List<GameObject> selectedSquares = new List<GameObject>();
+    private ChessPiece selectedChessPiece;
+	private Square[,] squares = new Square[8, 8];
+    private List<Index> possibleSquares = new List<Index>();
     private bool isChessPieceSelected = false;
 
-    private void Update()
+	private void Start()
+	{
+		int index = 0;
+		for(int i=0; i<8; i++)
+		{
+			for(int j=0; j<8; j++)
+			{
+				squares[i, j] = chessBoard.transform.GetChild(index++).gameObject.GetComponent<Square>();
+			}
+		}
+	}
+
+	private void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            target = GetClickedObject();
-
-            if(target == null)
-            {
-                return;
-            }
-
-            if (target.tag == "Chess Piece Element")
-            {
-                if (!isChessPieceSelected)
-                {
-                    Debug.Log("selected!");
-
-                    selectedChessPiece = target.transform.parent.gameObject;
-                    isChessPieceSelected = true;
-
-                    selectedSquares.Add(Instantiate(square, new Vector3(2.5f, 0, -3.5f), Quaternion.identity));
-                }
-                else
-                {
-                    Debug.Log("already selected");
-
-                    RemoveSelectedSquares();
-                }
-            }
-            else if(target.tag == "Board Element")
-            {
-                Debug.Log("board element selected!");
-                if (isChessPieceSelected)
-                {
-                    Debug.Log("chess piece move!");
-                    Vector3 destination = new Vector3(target.transform.position.x, 2.0f, target.transform.position.z);
-
-                    StartCoroutine(MoveChessPieceTo(selectedChessPiece, destination));
-                }
-
-                RemoveSelectedSquares();
-            }
-            else
-            {
-                Debug.Log("something selected!");
-
-                RemoveSelectedSquares();
-            }
+            if((target = GetClickedObject()) != null)
+			{
+				PerformSelectedEvent();
+			}
         }
     }
 
@@ -78,31 +58,67 @@ public class GameManager : MonoBehaviour
         return target;
     }
 
+	private void PerformSelectedEvent()
+	{
+		if (target.tag == "Chess Piece Element")
+		{
+			if (!isChessPieceSelected)
+			{
+				Debug.Log("selected!");
+
+				selectedChessPiece = target.transform.parent.GetComponent<ChessPiece>();
+				isChessPieceSelected = true;
+
+				// 그 Chess Piece가 이동할 수 있는 Square를 표시
+				squares[3, 3].ChangeToSelectedMaterial();
+				possibleSquares.Add(new Index(3, 3));
+			}
+			else
+			{
+				Debug.Log("already selected");
+
+				RemoveSelectedSquares();
+			}
+		}
+		else if (target.tag == "Board Element")
+		{
+			if (isChessPieceSelected)
+			{
+				if (target.GetComponent<Square>().Status == "selected")
+				{
+					Debug.Log("chess piece move!");
+					Vector3 destination = new Vector3(target.transform.position.x, 2.0f, target.transform.position.z);
+
+					selectedChessPiece.MoveTo(destination);
+
+					RemoveSelectedSquares();
+				}
+				else
+				{
+					Debug.Log("chess piece can't go to there!");
+				}
+			}
+		}
+		else
+		{
+			Debug.Log("something selected!");
+		}
+	}
+
     private void RemoveSelectedSquares()
     {
-        int size = selectedSquares.Count;
+        int size = possibleSquares.Count;
 
+		// 선택되어있던 Chess Piece와 selected플래그를 초기화
         selectedChessPiece = null;
         isChessPieceSelected = false;
 
-        for (int i=0; i<size; i++)
+		// red컬러로 변경된 Square들을 원상태로 되돌림
+		for (int i=0; i<size; i++)
         {
-            Destroy(selectedSquares[i]);
-            selectedSquares.Remove(selectedSquares[i]);
-        }
-    }
-
-    private IEnumerator MoveChessPieceTo(GameObject chessPiece, Vector3 destination)
-    {
-        GameObject _chessPiece = chessPiece;
-        _chessPiece.GetComponent<Rigidbody>().isKinematic = true;
-
-        while (_chessPiece.transform.position.x != destination.x || _chessPiece.transform.position.z != destination.z)
-        {
-            _chessPiece.transform.position = Vector3.MoveTowards(_chessPiece.transform.position, destination, 0.09f);
-            yield return new WaitForSeconds(0f);
+			squares[possibleSquares[i].X, possibleSquares[i].Y].ChangeToOriginalMaterial();
         }
 
-        _chessPiece.GetComponent<Rigidbody>().isKinematic = false;
+		possibleSquares.Clear();
     }
 }
