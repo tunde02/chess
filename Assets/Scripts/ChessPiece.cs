@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ChessPieceType { Normal, Pawn, Rook, Knight, Bishop, Queen, King }
+public enum ChessPieceType { Pawn, Rook, Knight, Bishop, Queen, Normal }
 
 public class ChessPiece : MonoBehaviour
 {
@@ -46,9 +46,11 @@ public class ChessPiece : MonoBehaviour
 		GetComponent<Rigidbody>().isKinematic = false;
 	}
 
-	public void ChangeTypeTo(ChessPieceType newType)
+	public void SetType(ChessPieceType newType)
 	{
 		type = newType;
-		// 이 체스말을 type에 맞는 체스말로 변경
+
+        // 체스말을 type에 맞는 체스말로 변경하는 부분
+        Debug.Log("Set model of chess piece to " + newType.ToString());
 	}
 }

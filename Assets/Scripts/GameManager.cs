@@ -12,14 +12,17 @@ public class Index
 public class GameManager : MonoBehaviour
 {
     public Camera mainCamera;
-	public GameObject chessBoard;
+    public SelectUIManager selectUIManager;
+    public GameObject chessBoard;
     public GameObject chessPieceClone;
 	
     private GameObject target;
     private ChessPiece selectedChessPiece;
-	private Square[,] squares = new Square[8, 8];
+	private readonly Square[,] squares = new Square[8, 8];
     private List<Index> possibleSquares = new List<Index>();
     private bool isChessPieceSelected = false;
+
+    private Player player1;
 
 	private void Start()
 	{
@@ -28,12 +31,15 @@ public class GameManager : MonoBehaviour
 		{
 			for(int j=0; j<8; j++)
 			{
-				squares[i, j] = chessBoard.transform.GetChild(index++).gameObject.GetComponent<Square>();
-			}
+                squares[i, j] = chessBoard.transform.GetChild(index++).gameObject.GetComponent<Square>();
+            }
 		}
 
         CreateChessPieces();
-	}
+
+        // test case
+        player1 = new Player();
+    }
 
     private void CreateChessPieces()
     {
@@ -45,12 +51,11 @@ public class GameManager : MonoBehaviour
                 Instantiate(chessPieceClone, new Vector3(temp.x, temp.y + 2, temp.z), Quaternion.identity);
             }
         }
-        Debug.Log("create done!");
     }
 
 	private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !selectUIManager.IsActive)
         {
             if((target = GetClickedObject()) != null)
 			{
@@ -78,22 +83,15 @@ public class GameManager : MonoBehaviour
 	{
 		if (target.tag == "Chess Piece Element")
 		{
-			if (!isChessPieceSelected)
-			{
-				Debug.Log("selected!");
+            ResetSelectedChessPiece();
 
+            if (!isChessPieceSelected)
+			{
 				selectedChessPiece = target.transform.parent.GetComponent<ChessPiece>();
 				isChessPieceSelected = true;
 
-				// 그 Chess Piece가 이동할 수 있는 Square를 표시
-				squares[6, 6].ChangeToSelectedMaterial();
-				possibleSquares.Add(new Index(6, 6));
-			}
-			else
-			{
-				Debug.Log("already selected");
-
-				RemoveSelectedSquares();
+                selectUIManager.SetRemainTexts(player1.GetChessPieceRemains());
+                selectUIManager.OpenUI();
 			}
 		}
 		else if (target.tag == "Board Element")
@@ -135,5 +133,23 @@ public class GameManager : MonoBehaviour
         }
 
 		possibleSquares.Clear();
+    }
+
+    public void SetSelectedChessPiece()
+    {
+        selectedChessPiece.SetType(selectUIManager.GetSelectedChessPieceType());
+        selectUIManager.QuitUI();
+    }
+
+    public void ResetSelectedChessPiece()
+    {
+        if (selectedChessPiece != null)
+        {
+            selectedChessPiece.SetType(ChessPieceType.Normal);
+        }
+
+        isChessPieceSelected = false;
+
+        Debug.Log("reset selected chess piece");
     }
 }
