@@ -11,7 +11,7 @@ public class ChessPiece : MonoBehaviour
     public float maxHeight = 3.0f;
     public float moveSpeed = 0.09f;
 
-	private ChessPieceType type = ChessPieceType.Normal;
+	public ChessPieceType type = ChessPieceType.Normal;
 	
 	public void MoveTo(Vector3 destination)
 	{
@@ -46,7 +46,12 @@ public class ChessPiece : MonoBehaviour
 		GetComponent<Rigidbody>().isKinematic = false;
 	}
 
-	public void SetType(ChessPieceType newType)
+    public new ChessPieceType GetType()
+    {
+        return type;
+    }
+
+    public void SetType(ChessPieceType newType)
 	{
 		type = newType;
 

@@ -20,7 +20,7 @@ public class Square : MonoBehaviour
     public void ChangeToSelectedMaterial()
     {
         render.material = selectedMaterial;
-		Status = "selected";
+		Status = "possible";
     }
 
     public void ChangeToOriginalMaterial()

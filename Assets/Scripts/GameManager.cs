@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -98,13 +98,13 @@ public class GameManager : MonoBehaviour
 		{
 			if (isChessPieceSelected)
 			{
-				if (target.GetComponent<Square>().Status == "selected")
+				if (target.GetComponent<Square>().Status == "possible")
 				{
 					Debug.Log("chess piece move!");
 
 					selectedChessPiece.MoveTo(target.transform.position);
 
-					RemoveSelectedSquares();
+					ResetPossibleSquares();
 				}
 				else
 				{
@@ -118,7 +118,34 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-    private void RemoveSelectedSquares()
+    private void SetPossibleSquares()
+    {
+        Debug.Log("set possible squares");
+
+        // selected chess piece의 type을 읽어와
+        // chess piece가 갈 수 있는 칸들을 하이라이트해줌
+        switch (selectedChessPiece.GetType())
+        {
+            case ChessPieceType.Pawn:
+                // 수정이 필요하다
+                Index index = new Index((int)Math.Round(selectedChessPiece.transform.position.z + 3.5f, MidpointRounding.AwayFromZero) + 1,
+                    (int)Math.Round(selectedChessPiece.transform.position.x + 3.5f, MidpointRounding.AwayFromZero));
+                Debug.Log(index.X + ", " + index.Y);
+                possibleSquares.Add(index);
+                squares[index.X, index.Y].ChangeToSelectedMaterial();
+                break;
+            default:
+                Debug.Log("chess piece type is Normal");
+                break;
+        }
+
+        // test case
+        //Index testIndex = new Index(5, 6);
+        //possibleSquares.Add(testIndex);
+        //squares[testIndex.X, testIndex.Y].ChangeToSelectedMaterial();
+    }
+
+    private void ResetPossibleSquares()
     {
         int size = possibleSquares.Count;
 
@@ -139,6 +166,7 @@ public class GameManager : MonoBehaviour
     {
         selectedChessPiece.SetType(selectUIManager.GetSelectedChessPieceType());
         selectUIManager.QuitUI();
+        SetPossibleSquares();
     }
 
     public void ResetSelectedChessPiece()
