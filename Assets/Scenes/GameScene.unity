@@ -249,7 +249,7 @@ MonoBehaviour:
   mainCamera: {fileID: 534669904}
   selectUIManager: {fileID: 393554168}
   chessBoard: {fileID: 225938912}
-  chessPieceClone: {fileID: 1470140835112718, guid: b1ef6f94c7606784899b4dbb3c72abed,
+  chessPieceClone: {fileID: 5068100458328091636, guid: 4d9302d47724b8e43b38ec287279a226,
     type: 3}
 --- !u!1 &75740312
 GameObject:
@@ -725,7 +725,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 170076733}
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalPosition: {x: 3.066, y: 9.738, z: -5.214}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

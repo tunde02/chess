@@ -285,6 +285,7 @@ GameObject:
   - component: {fileID: 33412785010619012}
   - component: {fileID: 23163748857072968}
   - component: {fileID: 64471667887144086}
+  - component: {fileID: 6864811810012445480}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Chess Piece Element
@@ -360,11 +361,24 @@ MeshCollider:
   m_GameObject: {fileID: 1125028147854162}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Convex: 1
   m_CookingOptions: 14
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!65 &6864811810012445480
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1125028147854162}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.8, y: 1.2935172, z: 0.8}
+  m_Center: {x: 0, y: -0.46020544, z: 0}
 --- !u!1 &1470140835112718
 GameObject:
   m_ObjectHideFlags: 0
@@ -374,11 +388,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4481334598178050}
-  - component: {fileID: 54748579014430172}
+  - component: {fileID: 7420540733142168088}
   - component: {fileID: 114158931449219392}
+  - component: {fileID: 1768952894846772191}
   m_Layer: 0
   m_Name: Chess Piece
-  m_TagString: Untagged
+  m_TagString: Chess Piece Element
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -402,7 +417,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &54748579014430172
+--- !u!54 &7420540733142168088
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -430,9 +445,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6b670778069b1f479e6f952bc67a553, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forms: []
+  forms:
+  - {fileID: 5867293191628753243, guid: 8962905d8d03eab47b0b58d694148544, type: 3}
+  - {fileID: 4424394228418911912, guid: 99b4355f74d24124f9a7855db8b01e64, type: 3}
+  - {fileID: 6396336542732869255, guid: 79ffae8836fd9bb41b611494d616ac4f, type: 3}
+  - {fileID: 7633126826048702518, guid: 8e2c9a5d94a6afd42a4cbc3a0fc7f479, type: 3}
+  - {fileID: 2941385577638694123, guid: 93ff324bb1e02d543ace64ec7239db18, type: 3}
   maxHeight: 3
   moveSpeed: 0.09
+  type: 5
+--- !u!65 &1768952894846772191
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1470140835112718}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 0.8, y: 0.3965531, z: 0.8}
+  m_Center: {x: 0, y: -0.011723459, z: 0}
 --- !u!1 &1832073035201344
 GameObject:
   m_ObjectHideFlags: 0

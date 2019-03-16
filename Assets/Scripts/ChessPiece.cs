@@ -11,9 +11,9 @@ public class ChessPiece : MonoBehaviour
     public float maxHeight = 3.0f;
     public float moveSpeed = 0.09f;
 
-	public ChessPieceType type = ChessPieceType.Normal;
-	
-	public void MoveTo(Vector3 destination)
+	private ChessPieceType type = ChessPieceType.Normal;
+
+    public void MoveTo(Vector3 destination)
 	{
 		StartCoroutine(StartMoveTo(destination));
 	}
@@ -43,8 +43,8 @@ public class ChessPiece : MonoBehaviour
 		}
 
         // 물리효과에 의해 자연스럽게 낙하
-		GetComponent<Rigidbody>().isKinematic = false;
-	}
+        GetComponent<Rigidbody>().isKinematic = false;
+    }
 
     public new ChessPieceType GetType()
     {
@@ -53,9 +53,13 @@ public class ChessPiece : MonoBehaviour
 
     public void SetType(ChessPieceType newType)
 	{
-		type = newType;
-
-        // 체스말을 type에 맞는 체스말로 변경하는 부분
-        Debug.Log("Set model of chess piece to " + newType.ToString());
-	}
+        // type에 맞는 체스말로 변경
+        Debug.Log((int)type);
+        Debug.Log(forms[(int)type]);
+        forms[(int)type].SetActive(false);
+        Debug.Log(forms[(int)newType]);
+        forms[(int)newType].SetActive(true);
+        type = newType;
+        Debug.Log("New type : " + newType);
+    }
 }

@@ -83,11 +83,13 @@ public class GameManager : MonoBehaviour
 	{
 		if (target.tag == "Chess Piece Element")
 		{
+            Debug.Log(target);
             ResetSelectedChessPiece();
 
             if (!isChessPieceSelected)
 			{
-				selectedChessPiece = target.transform.parent.GetComponent<ChessPiece>();
+                //selectedChessPiece = target.transform.parent.GetComponent<ChessPiece>();
+                selectedChessPiece = target.transform.parent.parent.GetComponent<ChessPiece>();
 				isChessPieceSelected = true;
 
                 selectUIManager.SetRemainTexts(player1.GetChessPieceRemains());
@@ -130,7 +132,7 @@ public class GameManager : MonoBehaviour
                 // 수정이 필요하다
                 Index index = new Index((int)Math.Round(selectedChessPiece.transform.position.z + 3.5f, MidpointRounding.AwayFromZero) + 1,
                     (int)Math.Round(selectedChessPiece.transform.position.x + 3.5f, MidpointRounding.AwayFromZero));
-                Debug.Log(index.X + ", " + index.Y);
+                //Debug.Log(index.X + ", " + index.Y);
                 possibleSquares.Add(index);
                 squares[index.X, index.Y].ChangeToSelectedMaterial();
                 break;
@@ -164,6 +166,7 @@ public class GameManager : MonoBehaviour
 
     public void SetSelectedChessPiece()
     {
+        Debug.Log("Change chess piece type to " + selectUIManager.GetSelectedChessPieceType());
         selectedChessPiece.SetType(selectUIManager.GetSelectedChessPieceType());
         selectUIManager.QuitUI();
         SetPossibleSquares();
