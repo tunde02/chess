@@ -29,4 +29,6 @@ public class Player
     {
         return chessPieceRemains;
     }
+
+    // test code for commit
 }
