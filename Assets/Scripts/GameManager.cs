@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -123,7 +124,8 @@ public class GameManager : MonoBehaviour
 					selectedChessPiece.MoveTo(target.transform.position);
 
 					ResetPossibleSquares();
-                    ResetSelectedChessPiece();
+                    //StartCoroutine(WaitTurn());
+                    //ResetSelectedChessPiece();
 
                     player[turn].SetTurn(false);
                     turn = turn == 0 ? 1 : 0;
@@ -146,19 +148,67 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+    private IEnumerator WaitTurn()
+    {
+        Debug.Log("start wait turn()");
+        int currentTurn = turn;
+        yield return new WaitForSeconds(0.5f);
+
+        while (currentTurn != turn)
+        {
+            yield return new WaitForSeconds(0.05f);
+        }
+
+        ResetSelectedChessPiece();
+    }
+
     public void OnChessPieceTypeButtonClicked()
     {
         Debug.Log("==OnChessPieceTypeButtonClicked==");
-        SetPossibleSquares();
-        currentlySelectedChessPiece.ChangeType(selectUIManager.GetSelectedChessPieceType());
+        currentlySelectedChessPiece.ChangeTypeTo(selectUIManager.GetSelectedChessPieceType());
+        UpdatePossibleSquares(currentlySelectedChessPiece);
         Debug.Log("=================================");
     }
 
-    private void SetPossibleSquares()
+    private void UpdatePossibleSquares(ChessPiece chessPiece)
     {
         // TODO: Chess Piece Type에 따른 possible squares 구현 (index를 이용해서)
 
-        Debug.Log("Set Possible Squares About " + currentlySelectedChessPiece.GetType());
+        Debug.Log("Update Possible Squares About " + chessPiece.Type);
+
+        ResetPossibleSquares();
+
+        // TEST CASE
+        Index index;
+        switch(chessPiece.Type)
+        {
+            case ChessPieceType.Pawn:
+                index = new Index(3, 1);
+                possibleSquares.Add(index);
+                squares[index.X, index.Y].ChangeToSelectedMaterial();
+                break;
+            case ChessPieceType.Rook:
+                index = new Index(3, 2);
+                possibleSquares.Add(index);
+                squares[index.X, index.Y].ChangeToSelectedMaterial();
+                break;
+            case ChessPieceType.Knight:
+                index = new Index(3, 3);
+                possibleSquares.Add(index);
+                squares[index.X, index.Y].ChangeToSelectedMaterial();
+                break;
+            case ChessPieceType.Bishop:
+                index = new Index(3, 4);
+                possibleSquares.Add(index);
+                squares[index.X, index.Y].ChangeToSelectedMaterial();
+                break;
+            case ChessPieceType.Queen:
+                index = new Index(3, 5);
+                possibleSquares.Add(index);
+                squares[index.X, index.Y].ChangeToSelectedMaterial();
+                break;
+        }
+        
 
         // selected chess piece의 type을 읽어와
         // chess piece가 갈 수 있는 칸들을 하이라이트해줌
@@ -209,8 +259,15 @@ public class GameManager : MonoBehaviour
 
         if (currentlySelectedChessPiece != null)
         {
-            currentlySelectedChessPiece.ChangeType(ChessPieceType.Normal);
+            currentlySelectedChessPiece.ChangeTypeTo(ChessPieceType.Normal);
         }
+
+        if (selectedChessPiece != null)
+        {
+            UpdatePossibleSquares(selectedChessPiece);
+        }
+
+        selectUIManager.QuitUI();
     }
 
     private void ResetSelectedChessPiece()
@@ -219,7 +276,7 @@ public class GameManager : MonoBehaviour
 
         if (selectedChessPiece != null)
         {
-            selectedChessPiece.ChangeType(ChessPieceType.Normal);
+            selectedChessPiece.ChangeTypeTo(ChessPieceType.Normal);
         }
 
         isConfirmed = false;

@@ -12,7 +12,7 @@ public class ChessPiece : MonoBehaviour
     public float moveSpeed = 0.09f;
     public Material whiteColor;// default color = black
 
-	private ChessPieceType type = ChessPieceType.Normal;
+	public ChessPieceType Type { get; set; }
     private Player owner;
 
 	private void Start()
@@ -31,6 +31,8 @@ public class ChessPiece : MonoBehaviour
                 renderers[i].material = whiteColor;
             }
         }
+
+        Type = ChessPieceType.Normal;
 	}
 
 	public void MoveTo(Vector3 destination)
@@ -38,27 +40,27 @@ public class ChessPiece : MonoBehaviour
 		StartCoroutine(StartMoveTo(destination));
 	}
 
-	private IEnumerator StartMoveTo(Vector3 _destination)
+	private IEnumerator StartMoveTo(Vector3 destination)
 	{
-        Vector3 destination = transform.position;
-        destination.y += maxHeight;
+        Vector3 _destination = transform.position;
+        _destination.y += maxHeight;
 
         GetComponent<Rigidbody>().isKinematic = true;
 
         // 다른 ChessPiece와의 충돌을 피하기 위해 먼저 위로 올림
-        while (transform.position.y < maxHeight)
+        while (transform.position.y < _destination.y)
         {
-            transform.position = Vector3.MoveTowards(transform.position, destination, moveSpeed);
+            transform.position = Vector3.MoveTowards(transform.position, _destination, moveSpeed);
             yield return null;
         }
 
-        destination.x = _destination.x;
-        destination.z = _destination.z;
-
+        _destination.x = destination.x;
+        _destination.z = destination.z;
+        
         // 목적지로 이동
-        while (transform.position.x != destination.x || transform.position.z != destination.z)
+        while (transform.position.x != _destination.x || transform.position.z != _destination.z)
 		{
-			transform.position = Vector3.MoveTowards(transform.position, destination, moveSpeed);
+			transform.position = Vector3.MoveTowards(transform.position, _destination, moveSpeed);
             yield return null;
 		}
 
@@ -66,17 +68,12 @@ public class ChessPiece : MonoBehaviour
         GetComponent<Rigidbody>().isKinematic = false;
     }
 
-    public new ChessPieceType GetType()
-    {
-        return type;
-    }
-
-    public void ChangeType(ChessPieceType newType)
+    public void ChangeTypeTo(ChessPieceType newType)
 	{
         // type에 맞는 체스말로 변경
-        forms[(int)type].SetActive(false);
+        forms[(int)Type].SetActive(false);
         forms[(int)newType].SetActive(true);
-        type = newType;
+        Type = newType;
     }
 
     public Player GetOwner()
