@@ -18,11 +18,13 @@ public class GameManager : MonoBehaviour
 	
     private GameObject target;
     private ChessPiece selectedChessPiece;
+    private ChessPiece currentlySelectedChessPiece;
 	private readonly Square[,] squares = new Square[8, 8];
     private List<Index> possibleSquares = new List<Index>();
-    private bool isChessPieceSelected = false;
+    private bool isConfirmed = false;// 굳이 필요할까? null검사하면 되지 않나
 
-    private Player player1;
+    private int turn = 0;
+    private Player[] player = new Player[2];
 
 	private void Start()
 	{
@@ -35,10 +37,15 @@ public class GameManager : MonoBehaviour
             }
 		}
 
+        // test case
+        player[0] = new Player(0);
+        player[1] = new Player(1);
+
         CreateChessPieces();
 
-        // test case
-        player1 = new Player();
+        player[0].SetTurn(true);
+
+        Debug.Log("Player" + turn + "'s turn");
     }
 
     private void CreateChessPieces()
@@ -48,7 +55,13 @@ public class GameManager : MonoBehaviour
             for(int j=0; j<2; j++)
             {
                 Vector3 temp = squares[j, i].transform.position;
-                Instantiate(chessPieceClone, new Vector3(temp.x, temp.y + 2, temp.z), Quaternion.identity);
+                player[0].AddChessPiece(Instantiate(chessPieceClone, new Vector3(temp.x, temp.y + 1, temp.z), Quaternion.identity).GetComponent<ChessPiece>());
+            }
+
+            for(int j=6; j<8; j++)
+            {
+                Vector3 temp = squares[j, i].transform.position;
+                player[1].AddChessPiece(Instantiate(chessPieceClone, new Vector3(temp.x, temp.y + 1, temp.z), Quaternion.identity).GetComponent<ChessPiece>());
             }
         }
     }
@@ -83,36 +96,49 @@ public class GameManager : MonoBehaviour
 	{
 		if (target.tag == "Chess Piece Element")
 		{
-            Debug.Log(target);
-            ResetSelectedChessPiece();
+            Debug.Log("You Clicked " + target);
+            
+            ChessPiece targetChessPiece = target.transform.parent.GetComponent<ChessPiece>();
 
-            if (!isChessPieceSelected)
-			{
-                //selectedChessPiece = target.transform.parent.GetComponent<ChessPiece>();
-                selectedChessPiece = target.transform.parent.parent.GetComponent<ChessPiece>();
-				isChessPieceSelected = true;
+            if (targetChessPiece.GetOwner() != player[turn])
+            {
+                Debug.Log("You Clicked Wrong Chess Piece!!");
+            }
+            else
+            {
+                currentlySelectedChessPiece = targetChessPiece;
 
-                selectUIManager.SetRemainTexts(player1.GetChessPieceRemains());
+                selectUIManager.SetRemainTexts(player[turn].GetChessPieceRemains());
                 selectUIManager.OpenUI();
-			}
+            }
 		}
 		else if (target.tag == "Board Element")
 		{
-			if (isChessPieceSelected)
+			if (isConfirmed)
 			{
 				if (target.GetComponent<Square>().Status == "possible")
 				{
-					Debug.Log("chess piece move!");
+					Debug.Log("Chess piece move!");
 
 					selectedChessPiece.MoveTo(target.transform.position);
 
 					ResetPossibleSquares();
-				}
+                    ResetSelectedChessPiece();
+
+                    player[turn].SetTurn(false);
+                    turn = turn == 0 ? 1 : 0;
+                    player[turn].SetTurn(true);
+                    Debug.Log("Player" + turn + "'s turn");
+                }
 				else
 				{
-					Debug.Log("chess piece can't go to there!");
+					Debug.Log("Chess piece can't go to there!");
 				}
 			}
+            else
+            {
+                Debug.Log("Select Chess Piece, First");
+            }
 		}
 		else
 		{
@@ -120,40 +146,42 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+    public void OnChessPieceTypeButtonClicked()
+    {
+        Debug.Log("==OnChessPieceTypeButtonClicked==");
+        SetPossibleSquares();
+        currentlySelectedChessPiece.ChangeType(selectUIManager.GetSelectedChessPieceType());
+        Debug.Log("=================================");
+    }
+
     private void SetPossibleSquares()
     {
-        Debug.Log("set possible squares");
+        // TODO: Chess Piece Type에 따른 possible squares 구현 (index를 이용해서)
+
+        Debug.Log("Set Possible Squares About " + currentlySelectedChessPiece.GetType());
 
         // selected chess piece의 type을 읽어와
         // chess piece가 갈 수 있는 칸들을 하이라이트해줌
-        switch (selectedChessPiece.GetType())
-        {
-            case ChessPieceType.Pawn:
-                // 수정이 필요하다
-                Index index = new Index((int)Math.Round(selectedChessPiece.transform.position.z + 3.5f, MidpointRounding.AwayFromZero) + 1,
-                    (int)Math.Round(selectedChessPiece.transform.position.x + 3.5f, MidpointRounding.AwayFromZero));
-                //Debug.Log(index.X + ", " + index.Y);
-                possibleSquares.Add(index);
-                squares[index.X, index.Y].ChangeToSelectedMaterial();
-                break;
-            default:
-                Debug.Log("chess piece type is Normal");
-                break;
-        }
 
-        // test case
-        //Index testIndex = new Index(5, 6);
-        //possibleSquares.Add(testIndex);
-        //squares[testIndex.X, testIndex.Y].ChangeToSelectedMaterial();
+        //switch (selectedChessPiece.GetType())
+        //{
+        //    case ChessPieceType.Pawn:
+        //        // 수정이 필요하다
+        //        Index index = new Index((int)Math.Round(selectedChessPiece.transform.position.z + 3.5f, MidpointRounding.AwayFromZero) + 1,
+        //            (int)Math.Round(selectedChessPiece.transform.position.x + 3.5f, MidpointRounding.AwayFromZero));
+        //        //Debug.Log(index.X + ", " + index.Y);
+        //        possibleSquares.Add(index);
+        //        squares[index.X, index.Y].ChangeToSelectedMaterial();
+        //        break;
+        //    default:
+        //        Debug.Log("chess piece type is Normal");
+        //        break;
+        //}
     }
 
     private void ResetPossibleSquares()
     {
         int size = possibleSquares.Count;
-
-		// 선택되어있던 Chess Piece와 selected플래그를 초기화
-        selectedChessPiece = null;
-        isChessPieceSelected = false;
 
 		// red컬러로 변경된 Square들을 원상태로 되돌림
 		for (int i=0; i<size; i++)
@@ -164,23 +192,36 @@ public class GameManager : MonoBehaviour
 		possibleSquares.Clear();
     }
 
-    public void SetSelectedChessPiece()
+    public void ConfirmSelectedChessPiece()
     {
-        Debug.Log("Change chess piece type to " + selectUIManager.GetSelectedChessPieceType());
-        selectedChessPiece.SetType(selectUIManager.GetSelectedChessPieceType());
+        ResetSelectedChessPiece();
+
+        selectedChessPiece = currentlySelectedChessPiece;
+        //currentlySelectedChessPiece = null; 필요할까?
+        isConfirmed = true;
+
         selectUIManager.QuitUI();
-        SetPossibleSquares();
     }
 
-    public void ResetSelectedChessPiece()
+    public void CancelSelectedChessPiece()
     {
+        Debug.Log("Cancel Selecting Chess Piece Type");
+
+        if (currentlySelectedChessPiece != null)
+        {
+            currentlySelectedChessPiece.ChangeType(ChessPieceType.Normal);
+        }
+    }
+
+    private void ResetSelectedChessPiece()
+    {
+        Debug.Log("Reset selected chess piece");
+
         if (selectedChessPiece != null)
         {
-            selectedChessPiece.SetType(ChessPieceType.Normal);
+            selectedChessPiece.ChangeType(ChessPieceType.Normal);
         }
 
-        isChessPieceSelected = false;
-
-        Debug.Log("reset selected chess piece");
+        isConfirmed = false;
     }
 }

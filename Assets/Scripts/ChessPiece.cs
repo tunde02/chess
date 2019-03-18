@@ -10,15 +10,27 @@ public class ChessPiece : MonoBehaviour
 	public GameObject[] forms;// 체스말의 종류를 바꿀 때 사용할 배열
     public float maxHeight = 3.0f;
     public float moveSpeed = 0.09f;
+    public Material whiteColor;// default color = black
 
 	private ChessPieceType type = ChessPieceType.Normal;
+    private Player owner;
 
 	private void Start()
 	{
 		for (int i = 0; i < 6; i++)
 		{
-			forms[i] = transform.GetChild(0).GetChild(i).gameObject;
+			forms[i] = transform.GetChild(i).gameObject;
 		}
+
+        MeshRenderer[] renderers = GetComponentsInChildren<MeshRenderer>();
+        if(owner.Number == 1)
+        {
+            int length = renderers.Length;
+            for(int i=0; i<length; i++)
+            {
+                renderers[i].material = whiteColor;
+            }
+        }
 	}
 
 	public void MoveTo(Vector3 destination)
@@ -59,11 +71,21 @@ public class ChessPiece : MonoBehaviour
         return type;
     }
 
-    public void SetType(ChessPieceType newType)
+    public void ChangeType(ChessPieceType newType)
 	{
         // type에 맞는 체스말로 변경
         forms[(int)type].SetActive(false);
         forms[(int)newType].SetActive(true);
         type = newType;
+    }
+
+    public Player GetOwner()
+    {
+        return owner;
+    }
+
+    public void SetOwner(Player player)
+    {
+        owner = player;
     }
 }
