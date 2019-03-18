@@ -13,7 +13,15 @@ public class ChessPiece : MonoBehaviour
 
 	private ChessPieceType type = ChessPieceType.Normal;
 
-    public void MoveTo(Vector3 destination)
+	private void Start()
+	{
+		for (int i = 0; i < 6; i++)
+		{
+			forms[i] = transform.GetChild(0).GetChild(i).gameObject;
+		}
+	}
+
+	public void MoveTo(Vector3 destination)
 	{
 		StartCoroutine(StartMoveTo(destination));
 	}
@@ -54,12 +62,8 @@ public class ChessPiece : MonoBehaviour
     public void SetType(ChessPieceType newType)
 	{
         // type에 맞는 체스말로 변경
-        Debug.Log((int)type);
-        Debug.Log(forms[(int)type]);
         forms[(int)type].SetActive(false);
-        Debug.Log(forms[(int)newType]);
         forms[(int)newType].SetActive(true);
         type = newType;
-        Debug.Log("New type : " + newType);
     }
 }

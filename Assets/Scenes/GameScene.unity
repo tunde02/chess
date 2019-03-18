@@ -2275,11 +2275,11 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1646432569}
-  - {fileID: 1364376147}
-  - {fileID: 532729296}
-  - {fileID: 1224909771}
   - {fileID: 975742918}
+  - {fileID: 1224909771}
+  - {fileID: 532729296}
+  - {fileID: 1364376147}
+  - {fileID: 1646432569}
   m_Father: {fileID: 393554167}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3182,7 +3182,7 @@ GameObject:
   - component: {fileID: 975742920}
   - component: {fileID: 975742919}
   m_Layer: 5
-  m_Name: Pawn Remains Text
+  m_Name: Queen Remains Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3196,15 +3196,15 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 975742917}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00007196998}
+  m_LocalPosition: {x: 0, y: 0, z: 0.000038701}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 652870805}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -57.98999, y: -84.57993}
+  m_AnchoredPosition: {x: -57.99, y: 154}
   m_SizeDelta: {x: 89.02, y: 50.12}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &975742919
@@ -3673,7 +3673,7 @@ GameObject:
   - component: {fileID: 1224909773}
   - component: {fileID: 1224909772}
   m_Layer: 5
-  m_Name: Rook Remains Text
+  m_Name: Bishop Remains Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3687,15 +3687,15 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1224909770}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.000052341806}
+  m_LocalPosition: {x: 0, y: 0, z: 0.000051413}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 652870805}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -57.98999, y: -24.94}
+  m_AnchoredPosition: {x: -57.99, y: 95}
   m_SizeDelta: {x: 89.02, y: 50.12}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1224909772
@@ -4184,7 +4184,7 @@ GameObject:
   - component: {fileID: 1364376149}
   - component: {fileID: 1364376148}
   m_Layer: 5
-  m_Name: Bishop Remains Text
+  m_Name: Rook Remains Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4198,15 +4198,15 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1364376146}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.000039256352}
+  m_LocalPosition: {x: 0, y: 0, z: -0.000066924}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 652870805}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -57.98999, y: 93.4}
+  m_AnchoredPosition: {x: -57.99, y: -24.94}
   m_SizeDelta: {x: 89.02, y: 50.12}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1364376148
@@ -5031,7 +5031,7 @@ GameObject:
   - component: {fileID: 1646432571}
   - component: {fileID: 1646432570}
   m_Layer: 5
-  m_Name: Queen Remains Text
+  m_Name: Pawn Remains Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5045,15 +5045,15 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1646432568}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.000026170903}
+  m_LocalPosition: {x: 0, y: 0, z: 0.00010917}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 652870805}
-  m_RootOrder: 0
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -57.98999, y: 154.28}
+  m_AnchoredPosition: {x: -57.989986, y: -84.57994}
   m_SizeDelta: {x: 89.02, y: 50.12}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1646432570
