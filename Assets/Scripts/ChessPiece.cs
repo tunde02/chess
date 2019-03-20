@@ -7,12 +7,19 @@ public enum ChessPieceType { Pawn, Rook, Knight, Bishop, Queen, Normal }
 
 public class ChessPiece : MonoBehaviour
 {
+	public enum State
+	{
+		Stop,
+		Move
+	}
+
 	public GameObject[] forms;// 체스말의 종류를 바꿀 때 사용할 배열
     public float maxHeight = 3.0f;
     public float moveSpeed = 0.09f;
     public Material whiteColor;// default color = black
 
 	public ChessPieceType Type { get; set; }
+	public State state;
     private Player owner;
 
 	private void Start()
@@ -33,6 +40,7 @@ public class ChessPiece : MonoBehaviour
         }
 
         Type = ChessPieceType.Normal;
+		state = State.Stop;
 	}
 
 	public void MoveTo(Vector3 destination)
@@ -44,6 +52,8 @@ public class ChessPiece : MonoBehaviour
 	{
         Vector3 _destination = transform.position;
         _destination.y += maxHeight;
+
+		state = State.Move;
 
         GetComponent<Rigidbody>().isKinematic = true;
 
@@ -66,7 +76,7 @@ public class ChessPiece : MonoBehaviour
 
         // 물리효과에 의해 자연스럽게 낙하
         GetComponent<Rigidbody>().isKinematic = false;
-    }
+	}
 
     public void ChangeTypeTo(ChessPieceType newType)
 	{
