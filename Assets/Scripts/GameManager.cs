@@ -19,11 +19,9 @@ public class GameManager : MonoBehaviour
 	
     private GameObject target;
     private ChessPiece selectedChessPiece;
-    private ChessPiece currentlySelectedChessPiece;
 	private readonly Square[,] squares = new Square[8, 8];
     private List<Index> possibleSquares = new List<Index>();
-    private bool isConfirmed = false;// 굳이 필요할까? null검사하면 되지 않나
-
+    private bool isConfirmed = false;
     private int turn = 0;
     private Player[] player = new Player[2];
 
@@ -44,9 +42,7 @@ public class GameManager : MonoBehaviour
 
         CreateChessPieces();
 
-        player[0].SetTurn(true);
-
-        Debug.Log("Player" + turn + "'s turn");
+        player[0].StartTurn();
     }
 
     private void CreateChessPieces()
@@ -101,17 +97,17 @@ public class GameManager : MonoBehaviour
             
             ChessPiece targetChessPiece = target.transform.parent.GetComponent<ChessPiece>();
 
-            if (targetChessPiece.GetOwner() != player[turn])
+            if (targetChessPiece.GetOwner() == player[turn])
             {
-                Debug.Log("You Clicked Wrong Chess Piece!!");
-            }
-            else
-            {
-                currentlySelectedChessPiece = targetChessPiece;
+				selectedChessPiece = targetChessPiece;
 
-                selectUIManager.SetRemainTexts(player[turn].GetChessPieceRemains());
-                selectUIManager.OpenUI();
-            }
+				selectUIManager.SetRemainTexts(player[turn].GetChessPieceRemains());
+				selectUIManager.OpenUI();
+			}
+			else
+            {
+				Debug.Log("You Clicked Wrong Chess Piece");
+			}
 		}
 		else if (target.tag == "Board Element")
 		{
@@ -121,17 +117,11 @@ public class GameManager : MonoBehaviour
 				{
 					Debug.Log("Chess piece move!");
 
-					selectedChessPiece.MoveTo(target.transform.position);
+					player[turn].currentChessPiece.MoveTo(target.transform.position);
+					StartCoroutine(WaitTurn());
 
 					ResetPossibleSquares();
-                    //StartCoroutine(WaitTurn());
-                    //ResetSelectedChessPiece();
-
-                    player[turn].SetTurn(false);
-                    turn = turn == 0 ? 1 : 0;
-                    player[turn].SetTurn(true);
-                    Debug.Log("Player" + turn + "'s turn");
-                }
+				}
 				else
 				{
 					Debug.Log("Chess piece can't go to there!");
@@ -150,24 +140,23 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator WaitTurn()
     {
-        Debug.Log("start wait turn()");
-        int currentTurn = turn;
-        yield return new WaitForSeconds(0.5f);
+		int waitTurn = turn;
 
-        while (currentTurn != turn)
+        while (player[turn].currentChessPiece.state != ChessPiece.State.Stop)
         {
+			Debug.Log("Chess Piece still moving");
             yield return new WaitForSeconds(0.05f);
         }
-
-        ResetSelectedChessPiece();
-    }
+		
+		player[turn].EndTurn();
+		turn = turn == 0 ? 1 : 0;
+		player[turn].StartTurn();
+	}
 
     public void OnChessPieceTypeButtonClicked()
     {
-        Debug.Log("==OnChessPieceTypeButtonClicked==");
-        currentlySelectedChessPiece.ChangeTypeTo(selectUIManager.GetSelectedChessPieceType());
-        UpdatePossibleSquares(currentlySelectedChessPiece);
-        Debug.Log("=================================");
+        selectedChessPiece.ChangeTypeTo(selectUIManager.GetSelectedChessPieceType());
+        UpdatePossibleSquares(selectedChessPiece);
     }
 
     private void UpdatePossibleSquares(ChessPiece chessPiece)
@@ -246,8 +235,8 @@ public class GameManager : MonoBehaviour
     {
         ResetSelectedChessPiece();
 
-        selectedChessPiece = currentlySelectedChessPiece;
-        //currentlySelectedChessPiece = null; 필요할까?
+        player[turn].currentChessPiece = selectedChessPiece;
+        selectedChessPiece = null;
         isConfirmed = true;
 
         selectUIManager.QuitUI();
@@ -257,14 +246,14 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Cancel Selecting Chess Piece Type");
 
-        if (currentlySelectedChessPiece != null)
-        {
-            currentlySelectedChessPiece.ChangeTypeTo(ChessPieceType.Normal);
-        }
-
         if (selectedChessPiece != null)
         {
-            UpdatePossibleSquares(selectedChessPiece);
+            selectedChessPiece.ChangeTypeTo(ChessPieceType.Normal);
+        }
+
+        if (isConfirmed)
+        {
+            UpdatePossibleSquares(player[turn].currentChessPiece);
         }
 
         selectUIManager.QuitUI();
@@ -272,11 +261,9 @@ public class GameManager : MonoBehaviour
 
     private void ResetSelectedChessPiece()
     {
-        Debug.Log("Reset selected chess piece");
-
-        if (selectedChessPiece != null)
+        if (player[turn].currentChessPiece != null)
         {
-            selectedChessPiece.ChangeTypeTo(ChessPieceType.Normal);
+			player[turn].currentChessPiece.ChangeTypeTo(ChessPieceType.Normal);
         }
 
         isConfirmed = false;

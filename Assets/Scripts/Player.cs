@@ -4,7 +4,8 @@ using UnityEngine;
 public class Player
 {
     public int Number { get; set; }
-    private bool isTurn;
+	public ChessPiece currentChessPiece;
+	private bool isTurn;
     private ChessPiece king;
     private List<ChessPiece> chessPieces;
     private int[] chessPieceRemains;
@@ -32,10 +33,21 @@ public class Player
         isKingAlive = true;
     }
 
-    public void SetTurn(bool turn)
-    {
-        isTurn = turn;
-    }
+	public void StartTurn()
+	{
+		Debug.Log("Player " + Number + "'s turn Start");
+		isTurn = true;
+		if (currentChessPiece != null)
+		{
+			currentChessPiece.ChangeTypeTo(ChessPieceType.Normal);
+			currentChessPiece = null;
+		}
+	}
+
+	public void EndTurn()
+	{
+		isTurn = false;
+	}
 
     public int[] GetChessPieceRemains()
     {
@@ -44,7 +56,6 @@ public class Player
 
     public void AddChessPiece(ChessPiece chessPiece)
     {
-        //Debug.Log("Add " + chessPiece + " to Player's List");
         chessPieces.Add(chessPiece);
         chessPiece.SetOwner(this);
     }
