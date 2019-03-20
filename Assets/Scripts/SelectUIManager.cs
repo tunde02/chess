@@ -13,6 +13,7 @@ public class SelectUIManager : MonoBehaviour
 
     public void OpenUI()
     {
+        SetRemainTexts();
         IsActive = true;
         selectedChessPieceType = ChessPieceType.Normal;
         gameObject.SetActive(true);
@@ -25,7 +26,7 @@ public class SelectUIManager : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void SetRemainTexts(int[] remains)
+    private void SetRemainTexts(int[] remains)
     {
         remainTexts[(int)ChessPieceType.Pawn].text = remains[(int)ChessPieceType.Pawn].ToString();
         remainTexts[(int)ChessPieceType.Rook].text = remains[(int)ChessPieceType.Rook].ToString();

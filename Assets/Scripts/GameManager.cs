@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     public SelectUIManager selectUIManager;
     public GameObject chessBoard;
     public GameObject chessPieceClone;
-	
+
     private GameObject target;
     private ChessPiece selectedChessPiece;
 	private readonly Square[,] squares = new Square[8, 8];
@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour
     {
         RaycastHit hit;
         GameObject target = null;
-        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);//마우스 포인트 근처 좌표를 만든다. 
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);//마우스 포인트 근처 좌표를 만든다.
 
         if (true == (Physics.Raycast(ray.origin, ray.direction * 10, out hit)))//마우스 근처에 오브젝트가 있는지 확인
         {
@@ -94,14 +94,18 @@ public class GameManager : MonoBehaviour
 		if (target.tag == "Chess Piece Element")
 		{
             Debug.Log("You Clicked " + target);
-            
+
             ChessPiece targetChessPiece = target.transform.parent.GetComponent<ChessPiece>();
+
+            if(isConfirmed && player[turn].currentChessPiece.state == ChessPiece.State.move)
+            {
+                return;
+            }
 
             if (targetChessPiece.GetOwner() == player[turn])
             {
 				selectedChessPiece = targetChessPiece;
 
-				selectUIManager.SetRemainTexts(player[turn].GetChessPieceRemains());
 				selectUIManager.OpenUI();
 			}
 			else
@@ -147,7 +151,7 @@ public class GameManager : MonoBehaviour
 			Debug.Log("Chess Piece still moving");
             yield return new WaitForSeconds(0.05f);
         }
-		
+
 		player[turn].EndTurn();
 		turn = turn == 0 ? 1 : 0;
 		player[turn].StartTurn();
@@ -197,7 +201,7 @@ public class GameManager : MonoBehaviour
                 squares[index.X, index.Y].ChangeToSelectedMaterial();
                 break;
         }
-        
+
 
         // selected chess piece의 type을 읽어와
         // chess piece가 갈 수 있는 칸들을 하이라이트해줌
