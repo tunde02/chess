@@ -27,4 +27,9 @@ public class Square : MonoBehaviour
         render.material = originalMaterial;
 		Status = "original";
     }
+
+	public void OnCollisionEnter(Collision collision)
+	{
+		collision.gameObject.GetComponent<ChessPiece>().state = ChessPiece.State.Stop;
+	}
 }
