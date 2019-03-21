@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class SelectUIManager : MonoBehaviour
@@ -10,12 +8,14 @@ public class SelectUIManager : MonoBehaviour
     public bool IsActive { get; set; }
 
     private ChessPieceType selectedChessPieceType;
+    private ChessPieceType prevChessPieceType;
 
-    public void OpenUI(int[] remains)
+    public void OpenUI(int[] remains, ChessPieceType prevType)
     {
         SetRemainTexts(remains);
         IsActive = true;
         selectedChessPieceType = ChessPieceType.Normal;
+        prevChessPieceType = prevType;
         gameObject.SetActive(true);
     }
 
@@ -38,6 +38,11 @@ public class SelectUIManager : MonoBehaviour
     public ChessPieceType GetSelectedChessPieceType()
     {
         return selectedChessPieceType;
+    }
+
+    public ChessPieceType GetPrevChessPieceType()
+    {
+        return prevChessPieceType;
     }
 
     public void SetSelectedChessPieceType(string typeName)

@@ -106,7 +106,14 @@ public class GameManager : MonoBehaviour
             {
 				selectedChessPiece = targetChessPiece;
 
-				selectUIManager.OpenUI(player[turn].GetChessPieceRemains());
+                if (player[turn].currentChessPiece != null)
+                {
+                    selectUIManager.OpenUI(player[turn].GetChessPieceRemains(), player[turn].currentChessPiece.Type);
+                }
+                else
+                {
+                    selectUIManager.OpenUI(player[turn].GetChessPieceRemains(), ChessPieceType.Normal);
+                }
 			}
 			else
             {
@@ -201,6 +208,8 @@ public class GameManager : MonoBehaviour
                 possibleSquares.Add(index);
                 squares[index.X, index.Y].ChangeToSelectedMaterial();
                 break;
+            default:
+                break;
         }
 
 
@@ -238,7 +247,7 @@ public class GameManager : MonoBehaviour
 
     public void ConfirmSelectedChessPiece()
     {
-		if (player[turn].currentChessPiece != null)
+		if (player[turn].currentChessPiece != null && player[turn].currentChessPiece != selectedChessPiece)
 		{
 			player[turn].currentChessPiece.ChangeTypeTo(ChessPieceType.Normal);
 		}
@@ -252,16 +261,18 @@ public class GameManager : MonoBehaviour
 
     public void CancelSelectedChessPiece()
     {
-        Debug.Log("Cancel Selecting Chess Piece Type");
-
-        if (selectedChessPiece != null)
-        {
-            selectedChessPiece.ChangeTypeTo(ChessPieceType.Normal);
-        }
+        // 타입이 정해져있던 Chess Piece를 클릭해서 타입을 바꾸다가,
+        // 취소하면 원래 타입으로 되돌아가야한다.
+        selectedChessPiece.ChangeTypeTo(ChessPieceType.Normal);
 
         if (isConfirmed)
         {
+            player[turn].currentChessPiece.ChangeTypeTo(selectUIManager.GetPrevChessPieceType());
             UpdatePossibleSquares(player[turn].currentChessPiece);
+        }
+        else
+        {
+            UpdatePossibleSquares(selectedChessPiece);
         }
 
         selectUIManager.QuitUI();

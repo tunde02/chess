@@ -19,6 +19,7 @@ public class ChessPiece : MonoBehaviour
 	public ChessPieceType Type { get; set; }
 	public State state;
     private Player owner;
+    private int destroyCount = 1;
 
 	private void Start()
 	{
@@ -30,23 +31,11 @@ public class ChessPiece : MonoBehaviour
 		Type = ChessPieceType.Normal;
 		state = State.Stop;
 
-		if(owner.Number == 1)
-		{
-			ChangeColor();
-		}
-	}
-
-	private void Update()
-	{
-		//if(Input.GetMouseButtonDown(0))
-		//{
-		//	ChangeColor();
-		//}
-		//else if(Input.GetMouseButtonDown(1))
-		//{
-		//	ChangeType();
-		//}
-	}
+        if (owner.Number == 1)
+        {
+            ChangeColorToWhite();
+        }
+    }
 
 	public void MoveTo(Vector3 destination)
 	{
@@ -89,9 +78,21 @@ public class ChessPiece : MonoBehaviour
         forms[(int)Type].SetActive(false);
         forms[(int)newType].SetActive(true);
         Type = newType;
+
+        // 흰 색 플레이어일 경우 색을 바꿔준다
         if (owner.Number == 1)
         {
-            ChangeColor();
+            ChangeColorToWhite();
+        }
+    }
+
+    private void ChangeColorToWhite()
+    {
+        MeshRenderer[] renderers = forms[(int)Type].GetComponentsInChildren<MeshRenderer>();
+
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            renderers[i].material = whiteColor;
         }
     }
 
@@ -104,17 +105,7 @@ public class ChessPiece : MonoBehaviour
     {
         owner = player;
 	}
-
-	public void ChangeColor()
-	{
-        MeshRenderer[] renderers = forms[(int)Type].GetComponentsInChildren<MeshRenderer>();
-
-        for(int i=0; i<renderers.Length; i++)
-        {
-            renderers[i].material = whiteColor;
-        }
-	}
-
+    
 	public void ChangeType()
 	{
 		forms[(int)Type].SetActive(false);
@@ -122,16 +113,17 @@ public class ChessPiece : MonoBehaviour
 		forms[(int)Type].SetActive(true);
 	}
 
-	public void OnCollisionEnter(Collision collision)
-	{
-		if (collision.gameObject.tag == "Chess Piece Element" && !owner.isTurn)
-		{
-			owner.MinusChessPiece(this);
-			PerformDestroyEvent();
-		}
-	}
-
-	private void PerformDestroyEvent()
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Chess Piece Element" && !owner.isTurn && destroyCount > 0)
+        {
+            --destroyCount;
+            owner.MinusChessPiece(this);
+            PerformDestroyEvent();
+        }
+    }
+    
+    private void PerformDestroyEvent()
 	{
 		Destroy(gameObject);
 		Debug.Log("Chess Piece Destroyed");
