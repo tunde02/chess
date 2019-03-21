@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 
 public enum ChessPieceType { Pawn, Rook, Knight, Bishop, Queen, Normal }
@@ -91,6 +89,10 @@ public class ChessPiece : MonoBehaviour
         forms[(int)Type].SetActive(false);
         forms[(int)newType].SetActive(true);
         Type = newType;
+        if (owner.Number == 1)
+        {
+            ChangeColor();
+        }
     }
 
     public Player GetOwner()
@@ -105,25 +107,12 @@ public class ChessPiece : MonoBehaviour
 
 	public void ChangeColor()
 	{
-		//List<MeshRenderer[]> renderersList = new List<MeshRenderer[]>();
+        MeshRenderer[] renderers = forms[(int)Type].GetComponentsInChildren<MeshRenderer>();
 
-		//for (int i = 0; i < transform.childCount; i++)
-		//{
-		//	renderersList.Add(transform.GetChild(i).GetComponentsInChildren<MeshRenderer>(true));
-		//}
-
-		//for (int i = 0; i < renderersList.Count; i++)
-		//{
-		//	int length = renderersList[i].Length;
-		//	for (int j = 0; j < length; j++)
-		//	{
-		//		renderersList[i][j].material = whiteColor;
-		//	}
-		//}
-		//renderersList.Clear();
-
-		MeshRenderer[] renderers = GetComponentsInChildren<MeshRenderer>();
-		Debug.Log(renderers.Length);
+        for(int i=0; i<renderers.Length; i++)
+        {
+            renderers[i].material = whiteColor;
+        }
 	}
 
 	public void ChangeType()
