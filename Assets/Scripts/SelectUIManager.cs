@@ -11,9 +11,9 @@ public class SelectUIManager : MonoBehaviour
 
     private ChessPieceType selectedChessPieceType;
 
-    public void OpenUI()
+    public void OpenUI(int[] remains)
     {
-        SetRemainTexts();
+        SetRemainTexts(remains);
         IsActive = true;
         selectedChessPieceType = ChessPieceType.Normal;
         gameObject.SetActive(true);

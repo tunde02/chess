@@ -97,16 +97,16 @@ public class GameManager : MonoBehaviour
 
             ChessPiece targetChessPiece = target.transform.parent.GetComponent<ChessPiece>();
 
-            if(isConfirmed && player[turn].currentChessPiece.state == ChessPiece.State.move)
-            {
-                return;
-            }
+			if (isConfirmed && player[turn].currentChessPiece.state == ChessPiece.State.Move)
+			{
+				return;
+			}
 
-            if (targetChessPiece.GetOwner() == player[turn])
+			if (targetChessPiece.GetOwner() == player[turn])
             {
 				selectedChessPiece = targetChessPiece;
 
-				selectUIManager.OpenUI();
+				selectUIManager.OpenUI(player[turn].GetChessPieceRemains());
 			}
 			else
             {
@@ -148,9 +148,10 @@ public class GameManager : MonoBehaviour
 
         while (player[turn].currentChessPiece.state != ChessPiece.State.Stop)
         {
-			Debug.Log("Chess Piece still moving");
             yield return new WaitForSeconds(0.05f);
         }
+
+		isConfirmed = false;
 
 		player[turn].EndTurn();
 		turn = turn == 0 ? 1 : 0;
@@ -237,9 +238,12 @@ public class GameManager : MonoBehaviour
 
     public void ConfirmSelectedChessPiece()
     {
-        ResetSelectedChessPiece();
+		if (player[turn].currentChessPiece != null)
+		{
+			player[turn].currentChessPiece.ChangeTypeTo(ChessPieceType.Normal);
+		}
 
-        player[turn].currentChessPiece = selectedChessPiece;
+		player[turn].currentChessPiece = selectedChessPiece;
         selectedChessPiece = null;
         isConfirmed = true;
 
@@ -261,15 +265,5 @@ public class GameManager : MonoBehaviour
         }
 
         selectUIManager.QuitUI();
-    }
-
-    private void ResetSelectedChessPiece()
-    {
-        if (player[turn].currentChessPiece != null)
-        {
-			player[turn].currentChessPiece.ChangeTypeTo(ChessPieceType.Normal);
-        }
-
-        isConfirmed = false;
     }
 }

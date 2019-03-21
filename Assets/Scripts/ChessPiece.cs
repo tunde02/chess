@@ -28,18 +28,8 @@ public class ChessPiece : MonoBehaviour
 		{
 			forms[i] = transform.GetChild(i).gameObject;
 		}
-
-        MeshRenderer[] renderers = GetComponentsInChildren<MeshRenderer>();
-        if(owner.Number == 1)
-        {
-            int length = renderers.Length;
-            for(int i=0; i<length; i++)
-            {
-                renderers[i].material = whiteColor;
-            }
-        }
-
-        Type = ChessPieceType.Normal;
+		
+		Type = ChessPieceType.Normal;
 		state = State.Stop;
 	}
 
@@ -94,5 +84,40 @@ public class ChessPiece : MonoBehaviour
     public void SetOwner(Player player)
     {
         owner = player;
-    }
+
+		if (owner.Number == 1)
+		{
+			List<MeshRenderer[]> renderersList = new List<MeshRenderer[]>();
+
+			for (int i = 0; i < transform.childCount; i++)
+			{
+				renderersList.Add(transform.GetChild(i).GetComponentsInChildren<MeshRenderer>());
+			}
+
+			for (int i = 0; i < renderersList.Count; i++)
+			{
+				int length = renderersList[i].Length;
+				for (int j = 0; j < length; j++)
+				{
+					renderersList[i][j].material = whiteColor;
+				}
+			}
+			renderersList.Clear();
+		}
+	}
+
+	public void OnCollisionEnter(Collision collision)
+	{
+		if (collision.gameObject.tag == "Chess Piece Element" && !owner.isTurn)
+		{
+			owner.MinusChessPiece(this);
+			PerformDestroyEvent();
+		}
+	}
+
+	private void PerformDestroyEvent()
+	{
+		Destroy(gameObject);
+		Debug.Log("Chess Piece Destroyed");
+	}
 }
