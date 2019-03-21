@@ -31,6 +31,23 @@ public class ChessPiece : MonoBehaviour
 		
 		Type = ChessPieceType.Normal;
 		state = State.Stop;
+
+		if(owner.Number == 1)
+		{
+			ChangeColor();
+		}
+	}
+
+	private void Update()
+	{
+		//if(Input.GetMouseButtonDown(0))
+		//{
+		//	ChangeColor();
+		//}
+		//else if(Input.GetMouseButtonDown(1))
+		//{
+		//	ChangeType();
+		//}
 	}
 
 	public void MoveTo(Vector3 destination)
@@ -84,26 +101,36 @@ public class ChessPiece : MonoBehaviour
     public void SetOwner(Player player)
     {
         owner = player;
+	}
 
-		if (owner.Number == 1)
-		{
-			List<MeshRenderer[]> renderersList = new List<MeshRenderer[]>();
+	public void ChangeColor()
+	{
+		//List<MeshRenderer[]> renderersList = new List<MeshRenderer[]>();
 
-			for (int i = 0; i < transform.childCount; i++)
-			{
-				renderersList.Add(transform.GetChild(i).GetComponentsInChildren<MeshRenderer>());
-			}
+		//for (int i = 0; i < transform.childCount; i++)
+		//{
+		//	renderersList.Add(transform.GetChild(i).GetComponentsInChildren<MeshRenderer>(true));
+		//}
 
-			for (int i = 0; i < renderersList.Count; i++)
-			{
-				int length = renderersList[i].Length;
-				for (int j = 0; j < length; j++)
-				{
-					renderersList[i][j].material = whiteColor;
-				}
-			}
-			renderersList.Clear();
-		}
+		//for (int i = 0; i < renderersList.Count; i++)
+		//{
+		//	int length = renderersList[i].Length;
+		//	for (int j = 0; j < length; j++)
+		//	{
+		//		renderersList[i][j].material = whiteColor;
+		//	}
+		//}
+		//renderersList.Clear();
+
+		MeshRenderer[] renderers = GetComponentsInChildren<MeshRenderer>();
+		Debug.Log(renderers.Length);
+	}
+
+	public void ChangeType()
+	{
+		forms[(int)Type].SetActive(false);
+		Type = (ChessPieceType)(((int)++Type) % 6);
+		forms[(int)Type].SetActive(true);
 	}
 
 	public void OnCollisionEnter(Collision collision)
