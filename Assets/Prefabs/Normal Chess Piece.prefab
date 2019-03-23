@@ -26,6 +26,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.8000001, y: 0.621662, z: 0.8000001}
   m_Center: {x: 0, y: 0.2487638, z: 0}
+--- !u!65 &4131072855740840130
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2202779949808212157}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.4, y: 0.43983954, z: 0.4}
+  m_Center: {x: 0.30090737, y: 0.84958315, z: 0}
 --- !u!65 &8225588350288773364
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -39,19 +52,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.5, y: 0.761135, z: 0.5}
   m_Center: {x: 0.26618883, y: 0.23968582, z: 0}
---- !u!65 &4131072855740840130
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2202779949808212157}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.4, y: 0.43983954, z: 0.4}
-  m_Center: {x: 0.30090737, y: 0.84958315, z: 0}
 --- !u!65 &3645384311727457622
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -60,7 +60,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3439574649349225949}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.27, y: 1.3569251, z: 0.27}
@@ -242,7 +242,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5068100458802075831}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.8, y: 0.9, z: 0.8}
@@ -255,7 +255,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7963600107533373748}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.33, y: 1.2474978, z: 0.33}
@@ -281,7 +281,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8877467432320454836}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.65, y: 1.4284217, z: 0.65}

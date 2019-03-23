@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Index
 {
@@ -14,6 +15,7 @@ public class GameManager : MonoBehaviour
 {
     public Camera mainCamera;
     public SelectUIManager selectUIManager;
+    public TextUIManager textUIManager;
     public GameObject chessBoard;
     public GameObject chessPieceClone;
 
@@ -276,5 +278,26 @@ public class GameManager : MonoBehaviour
         }
 
         selectUIManager.QuitUI();
+    }
+
+    public void ShowText(ChessPiece chessPiece)
+    {
+        string text = "Player " + chessPiece.GetOwner().Number + "'s\n" + chessPiece.Type + " -1";
+        textUIManager.SetText(chessPiece.GetOwner().Number, text);
+        StartCoroutine(MoveText(textUIManager.texts[chessPiece.GetOwner().Number]));
+    }
+
+    private IEnumerator MoveText(Text text)
+    {
+        Vector3 destination = text.GetComponent<RectTransform>().localPosition;
+        destination.y += 100f;
+
+        while(Mathf.Abs(text.GetComponent<RectTransform>().localPosition.y - destination.y) >= 1)
+        {
+            text.GetComponent<RectTransform>().localPosition = Vector3.MoveTowards(text.GetComponent<RectTransform>().localPosition, destination, 1.0f);
+            yield return null;
+        }
+
+        textUIManager.ResetText();
     }
 }

@@ -18,6 +18,7 @@ public class ChessPiece : MonoBehaviour
 
 	public ChessPieceType Type { get; set; }
 	public State state;
+    private GameManager gm;
     private Player owner;
     private int destroyCount = 1;
 
@@ -35,6 +36,8 @@ public class ChessPiece : MonoBehaviour
         {
             ChangeColorToWhite();
         }
+
+        gm = FindObjectOfType<GameManager>();
     }
 
 	public void MoveTo(Vector3 destination)
@@ -125,7 +128,12 @@ public class ChessPiece : MonoBehaviour
     
     private void PerformDestroyEvent()
 	{
+        ShowDestroyText();
 		Destroy(gameObject);
-		Debug.Log("Chess Piece Destroyed");
 	}
+
+    private void ShowDestroyText()
+    {
+        gm.ShowText(this);
+    }
 }
