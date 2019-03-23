@@ -6,6 +6,7 @@ public class Player
     public int Number { get; set; }
 	public ChessPiece currentChessPiece;
 	public bool isTurn;
+    public int pawnCount;
     private ChessPiece king;
     private List<ChessPiece> chessPieces;
     private int[] chessPieceRemains;
@@ -31,6 +32,8 @@ public class Player
         chessPieceRemains[(int)ChessPieceType.Queen] = 1;
 
         isKingAlive = true;
+
+        pawnCount = 8;
     }
 
 	public void StartTurn()

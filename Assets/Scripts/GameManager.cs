@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,6 +17,7 @@ public class GameManager : MonoBehaviour
     public TextUIManager textUIManager;
     public GameObject chessBoard;
     public GameObject chessPieceClone;
+    public bool isTest;
 
     private GameObject target;
     private ChessPiece selectedChessPiece;
@@ -126,9 +126,10 @@ public class GameManager : MonoBehaviour
 		{
 			if (isConfirmed)
 			{
-				if (target.GetComponent<Square>().Status == "possible")
+				if (target.GetComponent<Square>().status == "possible")
 				{
 					Debug.Log("Chess piece move!");
+
 
 					player[turn].currentChessPiece.MoveTo(target.transform.position);
 					StartCoroutine(WaitTurn());
@@ -178,60 +179,141 @@ public class GameManager : MonoBehaviour
         // TODO: Chess Piece Type에 따른 possible squares 구현 (index를 이용해서)
 
         Debug.Log("Update Possible Squares About " + chessPiece.Type);
-
+        Debug.Log(MeasureIndex(chessPiece).X + ", " + MeasureIndex(chessPiece).Y);
         ResetPossibleSquares();
 
-        // TEST CASE
         Index index;
-        switch(chessPiece.Type)
+
+        if (isTest)
+        {
+            switch (chessPiece.Type)
+            {
+                case ChessPieceType.Pawn:
+                    index = new Index(3, 1);
+                    possibleSquares.Add(index);
+                    squares[index.X, index.Y].ChangeToSelectedMaterial();
+                    break;
+                case ChessPieceType.Rook:
+                    index = new Index(3, 2);
+                    possibleSquares.Add(index);
+                    squares[index.X, index.Y].ChangeToSelectedMaterial();
+                    break;
+                case ChessPieceType.Knight:
+                    index = new Index(3, 3);
+                    possibleSquares.Add(index);
+                    squares[index.X, index.Y].ChangeToSelectedMaterial();
+                    break;
+                case ChessPieceType.Bishop:
+                    index = new Index(3, 4);
+                    possibleSquares.Add(index);
+                    squares[index.X, index.Y].ChangeToSelectedMaterial();
+                    break;
+                case ChessPieceType.Queen:
+                    index = new Index(3, 5);
+                    possibleSquares.Add(index);
+                    squares[index.X, index.Y].ChangeToSelectedMaterial();
+                    break;
+                default:
+                    break;
+            }
+            return;
+        }
+
+        Index chessPieceIndex = MeasureIndex(chessPiece);
+        List<Index> list = new List<Index>();
+        //Index index;
+
+        switch (chessPiece.Type)
         {
             case ChessPieceType.Pawn:
-                index = new Index(3, 1);
-                possibleSquares.Add(index);
-                squares[index.X, index.Y].ChangeToSelectedMaterial();
-                break;
-            case ChessPieceType.Rook:
-                index = new Index(3, 2);
-                possibleSquares.Add(index);
-                squares[index.X, index.Y].ChangeToSelectedMaterial();
-                break;
-            case ChessPieceType.Knight:
-                index = new Index(3, 3);
-                possibleSquares.Add(index);
-                squares[index.X, index.Y].ChangeToSelectedMaterial();
-                break;
-            case ChessPieceType.Bishop:
-                index = new Index(3, 4);
-                possibleSquares.Add(index);
-                squares[index.X, index.Y].ChangeToSelectedMaterial();
-                break;
-            case ChessPieceType.Queen:
-                index = new Index(3, 5);
-                possibleSquares.Add(index);
-                squares[index.X, index.Y].ChangeToSelectedMaterial();
+                // 1. 첫 전진만 2칸 전진 가능 -> pawn count를 둬서 pawn 개수만큼 pawn 선택시 2칸전진 가능하도록
+                // 1.a. pawn count를 어떻게 관리할까?
+                // 2. 평소 1칸 전진 가능 (단, 다른 말을 뛰어넘을 수 없다)
+                // 3. 상대 말을 잡으려면 1칸 대각선이동해서 잡아야함
+                // 4. 앙파상...?
+                // 5. 프로모션 -> 폰을 제외한 다른 말들 중 하나를 랜덤하게 +1 하도록
+
+                if ((turn == 0 && chessPieceIndex.X <= 6) || (turn == 1 && chessPieceIndex.X >= 1))
+                {
+                    // 일반 이동
+                    index = new Index(turn == 0 ? chessPieceIndex.X + 1 : chessPieceIndex.X - 1, chessPieceIndex.Y);
+                    if (!IsChessPieceThere(index))
+                    {
+                        list.Add(index);
+
+                        // 2칸 이동
+                        if (player[turn].pawnCount > 0 && ((turn == 0 && chessPieceIndex.X <= 5) || (turn == 1 && chessPieceIndex.X >= 2)))
+                        {
+                            index = new Index(turn == 0 ? chessPieceIndex.X + 2 : chessPieceIndex.X - 2, chessPieceIndex.Y);
+                            if (!IsChessPieceThere(index))
+                            {
+                                list.Add(index);
+                            }
+                        }
+                    }
+
+                    // 상대 말을 잡을 수 있는 경우
+                    Index leftCase = new Index(turn == 0 ? chessPieceIndex.X + 1 : chessPieceIndex.X - 1, chessPieceIndex.Y - 1); ;
+                    Index rightCase = new Index(turn == 0 ? chessPieceIndex.X + 1 : chessPieceIndex.X - 1, chessPieceIndex.Y + 1); ;
+
+                    if (IsChessPieceThere(leftCase)
+                            && !squares[leftCase.X, leftCase.Y].aboveChessPiece.GetOwner().isTurn)
+                    {
+                        list.Add(leftCase);
+                    }
+                    if (IsChessPieceThere(rightCase)
+                        && !squares[rightCase.X, rightCase.Y].aboveChessPiece.GetOwner().isTurn)
+                    {
+                        list.Add(rightCase);
+                    }
+                }
                 break;
             default:
+                Debug.Log("chess piece type is Normal");
                 break;
         }
 
+        foreach(Index i in list)
+        {
+            SetPossibleSquare(i);
+        }
+    }
 
-        // selected chess piece의 type을 읽어와
-        // chess piece가 갈 수 있는 칸들을 하이라이트해줌
+    private Index MeasureIndex(ChessPiece chessPiece)
+    {
+        Vector2 chessPiecePos = new Vector2(chessPiece.transform.position.x, chessPiece.transform.position.z);
+        float offset = 0.1f;
 
-        //switch (selectedChessPiece.GetType())
-        //{
-        //    case ChessPieceType.Pawn:
-        //        // 수정이 필요하다
-        //        Index index = new Index((int)Math.Round(selectedChessPiece.transform.position.z + 3.5f, MidpointRounding.AwayFromZero) + 1,
-        //            (int)Math.Round(selectedChessPiece.transform.position.x + 3.5f, MidpointRounding.AwayFromZero));
-        //        //Debug.Log(index.X + ", " + index.Y);
-        //        possibleSquares.Add(index);
-        //        squares[index.X, index.Y].ChangeToSelectedMaterial();
-        //        break;
-        //    default:
-        //        Debug.Log("chess piece type is Normal");
-        //        break;
-        //}
+        for(int i=0; i<8; i++)
+        {
+            for(int j=0; j<8; j++)
+            {
+                Vector2 squarePos = new Vector2(squares[j, i].transform.position.x, squares[j, i].transform.position.z);
+
+                if(Vector2.Distance(chessPiecePos, squarePos) <= offset)
+                {
+                    return new Index(j, i);
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private bool IsChessPieceThere(Index index)
+    {
+        if (squares[index.X, index.Y].aboveChessPiece == null)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    private void SetPossibleSquare(Index index)
+    {
+        possibleSquares.Add(index);
+        squares[index.X, index.Y].ChangeToSelectedMaterial();
     }
 
     private void ResetPossibleSquares()

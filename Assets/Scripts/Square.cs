@@ -5,31 +5,39 @@ public class Square : MonoBehaviour
 {
     public Material selectedMaterial;
 
+    public string status;
+    public ChessPiece aboveChessPiece;
     private MeshRenderer render;
     private Material originalMaterial;
-	public string Status { get; set; }
-
+	
     private void Start()
     {
         render = GetComponent<MeshRenderer>();
         originalMaterial = render.material;
-		Status = "original";
+		status = "original";
     }
 
     public void ChangeToSelectedMaterial()
     {
         render.material = selectedMaterial;
-		Status = "possible";
+		status = "possible";
     }
 
     public void ChangeToOriginalMaterial()
     {
         render.material = originalMaterial;
-		Status = "original";
+		status = "original";
     }
 
-	public void OnCollisionEnter(Collision collision)
+	private void OnCollisionEnter(Collision collision)
 	{
-		collision.gameObject.GetComponent<ChessPiece>().state = ChessPiece.State.Stop;
+        aboveChessPiece = collision.gameObject.GetComponent<ChessPiece>();
+
+        aboveChessPiece.state = ChessPiece.State.Stop;
 	}
+
+    private void OnCollisionExit(Collision collision)
+    {
+        aboveChessPiece = null;
+    }
 }

@@ -252,6 +252,7 @@ MonoBehaviour:
   chessBoard: {fileID: 225938912}
   chessPieceClone: {fileID: 5068100458328091636, guid: 4d9302d47724b8e43b38ec287279a226,
     type: 3}
+  isTest: 1
 --- !u!1001 &77749974
 PrefabInstance:
   m_ObjectHideFlags: 0
