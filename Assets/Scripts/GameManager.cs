@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     public SelectUIManager selectUIManager;
     public GameObject chessBoard;
     public GameObject chessPieceClone;
+    public GameObject particle;
 
     private GameObject target;
     private ChessPiece selectedChessPiece;

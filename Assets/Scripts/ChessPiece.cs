@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum ChessPieceType { Pawn, Rook, Knight, Bishop, Queen, Normal }
 
@@ -15,13 +16,14 @@ public class ChessPiece : MonoBehaviour
     public float maxHeight = 3.0f;
     public float moveSpeed = 0.09f;
     public Material whiteColor;// default color = black
+    public GameObject particle;
 
-	public ChessPieceType Type { get; set; }
+    public ChessPieceType Type { get; set; }
 	public State state;
     private Player owner;
     private int destroyCount = 1;
 
-	private void Start()
+    private void Start()
 	{
 		for (int i = 0; i < 6; i++)
 		{
@@ -46,7 +48,7 @@ public class ChessPiece : MonoBehaviour
 	{
         Vector3 _destination = transform.position;
         _destination.y += maxHeight;
-
+        Debug.Log(_destination);
 		state = State.Move;
 
         GetComponent<Rigidbody>().isKinematic = true;
@@ -70,7 +72,7 @@ public class ChessPiece : MonoBehaviour
 
         // 물리효과에 의해 자연스럽게 낙하
         GetComponent<Rigidbody>().isKinematic = false;
-	}
+    }
 
     public void ChangeTypeTo(ChessPieceType newType)
 	{
@@ -125,7 +127,21 @@ public class ChessPiece : MonoBehaviour
     
     private void PerformDestroyEvent()
 	{
-		Destroy(gameObject);
-		Debug.Log("Chess Piece Destroyed");
-	}
+        Destroy(gameObject);
+        DestroyParticleAction();
+    }
+
+    private void DestroyParticleAction()
+    {
+        GameObject[] particles = new GameObject[5];
+
+        for (int i = 0; i < 5; i++)
+        {
+            particles[i] = Instantiate(particle, transform.position, Quaternion.identity);
+            float posX = Random.Range(0f, 30f);
+            float posZ = Random.Range(0f, 30f);
+            particles[i].GetComponent<Rigidbody>().AddForce(new Vector3(posX, 250, posZ));
+            Destroy(particles[i], 1.5f);
+        }
+    }
 }

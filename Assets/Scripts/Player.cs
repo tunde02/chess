@@ -66,6 +66,6 @@ public class Player
 		// King을 Chess Piece Type에 넣어서 if문으로 구분할지 아니면 따로 만들지
 
 		chessPieceRemains[(int)chessPiece.Type]--;
-		chessPieces.Remove(chessPiece);// 잘 찾을 수 있을까
+		chessPieces.Remove(chessPiece);
 	}
 }

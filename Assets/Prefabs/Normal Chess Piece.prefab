@@ -26,6 +26,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.8000001, y: 0.621662, z: 0.8000001}
   m_Center: {x: 0, y: 0.2487638, z: 0}
+--- !u!65 &4131072855740840130
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2202779949808212157}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.4, y: 0.43983954, z: 0.4}
+  m_Center: {x: 0.30090737, y: 0.84958315, z: 0}
 --- !u!65 &8225588350288773364
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -39,19 +52,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.5, y: 0.761135, z: 0.5}
   m_Center: {x: 0.26618883, y: 0.23968582, z: 0}
---- !u!65 &4131072855740840130
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2202779949808212157}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.4, y: 0.43983954, z: 0.4}
-  m_Center: {x: 0.30090737, y: 0.84958315, z: 0}
 --- !u!65 &3645384311727457622
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -60,7 +60,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3439574649349225949}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.27, y: 1.3569251, z: 0.27}
@@ -125,6 +125,8 @@ MonoBehaviour:
   maxHeight: 3
   moveSpeed: 0.09
   whiteColor: {fileID: 2100000, guid: af6ac6fb839ea3240a0624f9709f5fbc, type: 2}
+  particle: {fileID: 5677974385912072804, guid: 7d76ec7a6e8ddd348bf2d5c9ed16efef,
+    type: 3}
   state: 0
 --- !u!54 &2351299815683320168
 Rigidbody:
@@ -242,7 +244,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5068100458802075831}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.8, y: 0.9, z: 0.8}
@@ -255,7 +257,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7963600107533373748}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.33, y: 1.2474978, z: 0.33}
@@ -343,6 +345,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5068100458328091637}
     m_Modifications:
+    - target: {fileID: 7633126826048702518, guid: 8e2c9a5d94a6afd42a4cbc3a0fc7f479,
+        type: 3}
+      propertyPath: m_Name
+      value: Bishop
+      objectReference: {fileID: 0}
+    - target: {fileID: 7633126826048702518, guid: 8e2c9a5d94a6afd42a4cbc3a0fc7f479,
+        type: 3}
+      propertyPath: m_TagString
+      value: Chess Piece Element
+      objectReference: {fileID: 0}
+    - target: {fileID: 7633126826048702518, guid: 8e2c9a5d94a6afd42a4cbc3a0fc7f479,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7633126826048702519, guid: 8e2c9a5d94a6afd42a4cbc3a0fc7f479,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -398,21 +415,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7633126826048702518, guid: 8e2c9a5d94a6afd42a4cbc3a0fc7f479,
-        type: 3}
-      propertyPath: m_Name
-      value: Bishop
-      objectReference: {fileID: 0}
-    - target: {fileID: 7633126826048702518, guid: 8e2c9a5d94a6afd42a4cbc3a0fc7f479,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7633126826048702518, guid: 8e2c9a5d94a6afd42a4cbc3a0fc7f479,
-        type: 3}
-      propertyPath: m_TagString
-      value: Chess Piece Element
-      objectReference: {fileID: 0}
     - target: {fileID: 8501414551593807690, guid: 8e2c9a5d94a6afd42a4cbc3a0fc7f479,
         type: 3}
       propertyPath: m_Size.x
@@ -437,11 +439,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Center.y
       value: 0.17750551
-      objectReference: {fileID: 0}
-    - target: {fileID: 8501414551593807690, guid: 8e2c9a5d94a6afd42a4cbc3a0fc7f479,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7633126826089069926, guid: 8e2c9a5d94a6afd42a4cbc3a0fc7f479,
         type: 3}
@@ -488,8 +485,7 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 3150582309825993620, guid: 8e2c9a5d94a6afd42a4cbc3a0fc7f479, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8e2c9a5d94a6afd42a4cbc3a0fc7f479, type: 3}
 --- !u!1 &3439574649349225949 stripped
 GameObject:
@@ -517,13 +513,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2941385577638694123, guid: 93ff324bb1e02d543ace64ec7239db18,
         type: 3}
-      propertyPath: m_IsActive
-      value: 0
+      propertyPath: m_TagString
+      value: Chess Piece Element
       objectReference: {fileID: 0}
     - target: {fileID: 2941385577638694123, guid: 93ff324bb1e02d543ace64ec7239db18,
         type: 3}
-      propertyPath: m_TagString
-      value: Chess Piece Element
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2941385577638694122, guid: 93ff324bb1e02d543ace64ec7239db18,
         type: 3}
@@ -665,8 +661,7 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 1820468237169654909, guid: 93ff324bb1e02d543ace64ec7239db18, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 93ff324bb1e02d543ace64ec7239db18, type: 3}
 --- !u!1 &7963600107533373748 stripped
 GameObject:
@@ -694,13 +689,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4424394228418911912, guid: 99b4355f74d24124f9a7855db8b01e64,
         type: 3}
-      propertyPath: m_IsActive
-      value: 0
+      propertyPath: m_TagString
+      value: Chess Piece Element
       objectReference: {fileID: 0}
     - target: {fileID: 4424394228418911912, guid: 99b4355f74d24124f9a7855db8b01e64,
         type: 3}
-      propertyPath: m_TagString
-      value: Chess Piece Element
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4424394228418911913, guid: 99b4355f74d24124f9a7855db8b01e64,
         type: 3}
@@ -794,31 +789,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2966928794306735087, guid: 99b4355f74d24124f9a7855db8b01e64,
         type: 3}
-      propertyPath: m_Size.y
-      value: 0.13697666
-      objectReference: {fileID: 0}
-    - target: {fileID: 2966928794306735087, guid: 99b4355f74d24124f9a7855db8b01e64,
-        type: 3}
-      propertyPath: m_Center.x
-      value: 0.000000014901161
-      objectReference: {fileID: 0}
-    - target: {fileID: 2966928794306735087, guid: 99b4355f74d24124f9a7855db8b01e64,
-        type: 3}
-      propertyPath: m_Center.y
-      value: 0.5518347
-      objectReference: {fileID: 0}
-    - target: {fileID: 2966928794306735087, guid: 99b4355f74d24124f9a7855db8b01e64,
-        type: 3}
-      propertyPath: m_Size.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2966928794306735087, guid: 99b4355f74d24124f9a7855db8b01e64,
-        type: 3}
-      propertyPath: m_Size.z
-      value: 0.99270886
-      objectReference: {fileID: 0}
-    - target: {fileID: 2966928794306735087, guid: 99b4355f74d24124f9a7855db8b01e64,
-        type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
@@ -862,18 +832,12 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 4424394227646472582, guid: 99b4355f74d24124f9a7855db8b01e64,
-        type: 3}
-      propertyPath: m_DynamicOccludee
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4424394227646472699, guid: 99b4355f74d24124f9a7855db8b01e64,
         type: 3}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 4306166457783957972, guid: 99b4355f74d24124f9a7855db8b01e64, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 99b4355f74d24124f9a7855db8b01e64, type: 3}
 --- !u!4 &8877467432320454837 stripped
 Transform:
@@ -901,13 +865,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5867293191628753243, guid: 8962905d8d03eab47b0b58d694148544,
         type: 3}
-      propertyPath: m_IsActive
-      value: 0
+      propertyPath: m_TagString
+      value: Chess Piece Element
       objectReference: {fileID: 0}
     - target: {fileID: 5867293191628753243, guid: 8962905d8d03eab47b0b58d694148544,
         type: 3}
-      propertyPath: m_TagString
-      value: Chess Piece Element
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2352179147142364153, guid: 8962905d8d03eab47b0b58d694148544,
         type: 3}
@@ -989,16 +953,6 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Chess Piece Element
       objectReference: {fileID: 0}
-    - target: {fileID: 2918503346498373896, guid: 8962905d8d03eab47b0b58d694148544,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6944289008700221238, guid: 8962905d8d03eab47b0b58d694148544,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6944289008700221238, guid: 8962905d8d03eab47b0b58d694148544,
         type: 3}
       propertyPath: m_IsTrigger
@@ -1013,11 +967,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3858534798276670416, guid: 8962905d8d03eab47b0b58d694148544,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9140975342108968596, guid: 8962905d8d03eab47b0b58d694148544,
         type: 3}
@@ -1045,6 +994,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5068100458328091637}
     m_Modifications:
+    - target: {fileID: 6396336542732869255, guid: 79ffae8836fd9bb41b611494d616ac4f,
+        type: 3}
+      propertyPath: m_Name
+      value: Knight
+      objectReference: {fileID: 0}
+    - target: {fileID: 6396336542732869255, guid: 79ffae8836fd9bb41b611494d616ac4f,
+        type: 3}
+      propertyPath: m_TagString
+      value: Chess Piece Element
+      objectReference: {fileID: 0}
+    - target: {fileID: 6396336542732869255, guid: 79ffae8836fd9bb41b611494d616ac4f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6396336542732869273, guid: 79ffae8836fd9bb41b611494d616ac4f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1100,21 +1064,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6396336542732869255, guid: 79ffae8836fd9bb41b611494d616ac4f,
-        type: 3}
-      propertyPath: m_Name
-      value: Knight
-      objectReference: {fileID: 0}
-    - target: {fileID: 6396336542732869255, guid: 79ffae8836fd9bb41b611494d616ac4f,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6396336542732869255, guid: 79ffae8836fd9bb41b611494d616ac4f,
-        type: 3}
-      propertyPath: m_TagString
-      value: Chess Piece Element
-      objectReference: {fileID: 0}
     - target: {fileID: 6396336542732247905, guid: 79ffae8836fd9bb41b611494d616ac4f,
         type: 3}
       propertyPath: m_TagString
@@ -1140,8 +1089,7 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 6396336542732869272, guid: 79ffae8836fd9bb41b611494d616ac4f, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 79ffae8836fd9bb41b611494d616ac4f, type: 3}
 --- !u!4 &2202779949808212131 stripped
 Transform:
