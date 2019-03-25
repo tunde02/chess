@@ -101,6 +101,16 @@ public class ChessPiece : MonoBehaviour
         }
     }
 
+    public void ChangeColorToWhite()
+    {
+        MeshRenderer[] renderers = forms[(int)Type].GetComponentsInChildren<MeshRenderer>();
+
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            renderers[i].material = whiteColor;
+        }
+    }
+
     public Player GetOwner()
     {
         return owner;
@@ -115,9 +125,18 @@ public class ChessPiece : MonoBehaviour
     {
         if (collision.gameObject.tag == "Chess Piece Element" && !owner.isTurn && destroyCount > 0)
         {
-            --destroyCount;
-            owner.MinusChessPiece(this);
-            PerformDestroyEvent();
+            if (Type == ChessPieceType.King)
+            {
+                --destroyCount;
+                PerformDestroyEvent();
+                gm.PerformGameOver();
+            }
+            else
+            {
+                --destroyCount;
+                owner.MinusChessPiece(this);
+                PerformDestroyEvent();
+            }
         }
     }
     

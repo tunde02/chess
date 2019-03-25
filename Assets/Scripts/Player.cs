@@ -11,7 +11,7 @@ public class Player
     public ChessPiece king;
     private List<ChessPiece> chessPieces;
     private int[] chessPieceRemains;
-    
+
     public Player(int number)
     {
         Number = number;

@@ -181,13 +181,23 @@ public class GameManager : MonoBehaviour
                 {
                     selectedChessPiece = targetChessPiece;
 
-                    if (player[turn].currentChessPiece != null)
+                    if (selectedChessPiece.Type == ChessPieceType.King)
                     {
-                        selectUIManager.OpenUI(player[turn].GetChessPieceRemains(), player[turn].currentChessPiece.Type);
+                        player[turn].currentChessPiece = selectedChessPiece;
+                        selectedChessPiece = null;
+                        isConfirmed = true;
+                        UpdatePossibleSquares(player[turn].currentChessPiece);
                     }
                     else
                     {
-                        selectUIManager.OpenUI(player[turn].GetChessPieceRemains(), ChessPieceType.Normal);
+                        if (player[turn].currentChessPiece != null)
+                        {
+                            selectUIManager.OpenUI(player[turn].GetChessPieceRemains(), player[turn].currentChessPiece.Type);
+                        }
+                        else
+                        {
+                            selectUIManager.OpenUI(player[turn].GetChessPieceRemains(), ChessPieceType.Normal);
+                        }
                     }
                 }
                 else
@@ -709,6 +719,30 @@ public class GameManager : MonoBehaviour
                     }
                 }
                 break;
+            case ChessPieceType.King:
+                for (int i = -1; i <= 1; i++)
+                {
+                    for (int j = -1; j <= 1; j++)
+                    {
+                        if (i == 0 && j == 0)
+                        {
+                            continue;
+                        }
+
+                        try
+                        {
+                            if (squares[chessPieceIndex.X + i, chessPieceIndex.Y + j].aboveChessPiece.GetOwner() == player[turn])
+                            {
+                                continue;
+                            }
+
+                            list.Add(new Index(chessPieceIndex.X + i, chessPieceIndex.Y + j));
+                        }
+                        catch (System.IndexOutOfRangeException) { }
+                        catch (System.NullReferenceException) { }
+                    }
+                }
+                break;
             default:
                 Debug.Log("chess piece type is Normal");
                 break;
@@ -788,7 +822,10 @@ public class GameManager : MonoBehaviour
     {
         // 타입이 정해져있던 Chess Piece를 클릭해서 타입을 바꾸다가,
         // 취소하면 원래 타입으로 되돌아가야한다.
-        selectedChessPiece.ChangeTypeTo(ChessPieceType.Normal);
+        if (selectedChessPiece.Type != ChessPieceType.King)
+        {
+            selectedChessPiece.ChangeTypeTo(ChessPieceType.Normal);
+        }
 
         if (isConfirmed)
         {
@@ -824,7 +861,7 @@ public class GameManager : MonoBehaviour
         textUIManager.ResetText();
     }
 
-    private void PerformGameOver()
+    public void PerformGameOver()
     {
         menuUIManager.gameObject.SetActive(true);
     }
