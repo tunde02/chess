@@ -274,18 +274,26 @@ public class GameManager : MonoBehaviour
 
 				while(up)
 				{
-					if(squares[chessPieceIndex.X + i, chessPieceIndex.Y].aboveChessPiece != null)
-					{
-						if(squares[chessPieceIndex.X + i, chessPieceIndex.Y].aboveChessPiece.GetOwner() != player[turn])
-						{
-							list.Add(new Index(chessPieceIndex.X + i, chessPieceIndex.Y));
-						}
-						i = 1;
-						up = false;
-						break;
-					}
+                    try
+                    {
+                        if (squares[chessPieceIndex.X + i, chessPieceIndex.Y].aboveChessPiece != null)
+                        {
+                            if (squares[chessPieceIndex.X + i, chessPieceIndex.Y].aboveChessPiece.GetOwner() != player[turn])
+                            {
+                                list.Add(new Index(chessPieceIndex.X + i, chessPieceIndex.Y));
+                            }
+                            i = 1;
+                            up = false;
+                            break;
+                        }
 
-					list.Add(new Index(chessPieceIndex.X + i, chessPieceIndex.Y));
+                        list.Add(new Index(chessPieceIndex.X + i, chessPieceIndex.Y));
+                    }
+                    catch(System.IndexOutOfRangeException e)
+                    {
+                        i = 1;
+                        break;
+                    }
 
 					if(++i >= 8)
 					{
@@ -296,18 +304,26 @@ public class GameManager : MonoBehaviour
 
 				while (down)
 				{
-					if (squares[chessPieceIndex.X - i, chessPieceIndex.Y].aboveChessPiece != null)
-					{
-						if (squares[chessPieceIndex.X - i, chessPieceIndex.Y].aboveChessPiece.GetOwner() != player[turn])
-						{
-							list.Add(new Index(chessPieceIndex.X - i, chessPieceIndex.Y));
-						}
-						i = 1;
-						down = false;
-						break;
-					}
+                    try
+                    {
+                        if (squares[chessPieceIndex.X - i, chessPieceIndex.Y].aboveChessPiece != null)
+                        {
+                            if (squares[chessPieceIndex.X - i, chessPieceIndex.Y].aboveChessPiece.GetOwner() != player[turn])
+                            {
+                                list.Add(new Index(chessPieceIndex.X - i, chessPieceIndex.Y));
+                            }
+                            i = 1;
+                            down = false;
+                            break;
+                        }
 
-					list.Add(new Index(chessPieceIndex.X - i, chessPieceIndex.Y));
+                        list.Add(new Index(chessPieceIndex.X - i, chessPieceIndex.Y));
+                    }
+                    catch(System.IndexOutOfRangeException e)
+                    {
+                        i = 1;
+                        break;
+                    }
 
 					if (++i >= 8)
 					{
@@ -318,18 +334,26 @@ public class GameManager : MonoBehaviour
 
 				while (left)
 				{
-					if (squares[chessPieceIndex.X, chessPieceIndex.Y - i].aboveChessPiece != null)
-					{
-						if (squares[chessPieceIndex.X, chessPieceIndex.Y - i].aboveChessPiece.GetOwner() != player[turn])
-						{
-							list.Add(new Index(chessPieceIndex.X, chessPieceIndex.Y - i));
-						}
-						i = 1;
-						left = false;
-						break;
-					}
+                    try
+                    {
+                        if (squares[chessPieceIndex.X, chessPieceIndex.Y - i].aboveChessPiece != null)
+                        {
+                            if (squares[chessPieceIndex.X, chessPieceIndex.Y - i].aboveChessPiece.GetOwner() != player[turn])
+                            {
+                                list.Add(new Index(chessPieceIndex.X, chessPieceIndex.Y - i));
+                            }
+                            i = 1;
+                            left = false;
+                            break;
+                        }
 
-					list.Add(new Index(chessPieceIndex.X, chessPieceIndex.Y - i));
+                        list.Add(new Index(chessPieceIndex.X, chessPieceIndex.Y - i));
+                    }
+                    catch(System.IndexOutOfRangeException e)
+                    {
+                        i = 1;
+                        break;
+                    }
 
 					if (++i >= 8)
 					{
@@ -340,18 +364,26 @@ public class GameManager : MonoBehaviour
 
 				while (right)
 				{
-					if (squares[chessPieceIndex.X, chessPieceIndex.Y + i].aboveChessPiece != null)
-					{
-						if (squares[chessPieceIndex.X, chessPieceIndex.Y + i].aboveChessPiece.GetOwner() != player[turn])
-						{
-							list.Add(new Index(chessPieceIndex.X, chessPieceIndex.Y + i));
-						}
-						i = 1;
-						right = false;
-						break;
-					}
+                    try
+                    {
+                        if (squares[chessPieceIndex.X, chessPieceIndex.Y + i].aboveChessPiece != null)
+                        {
+                            if (squares[chessPieceIndex.X, chessPieceIndex.Y + i].aboveChessPiece.GetOwner() != player[turn])
+                            {
+                                list.Add(new Index(chessPieceIndex.X, chessPieceIndex.Y + i));
+                            }
+                            i = 1;
+                            right = false;
+                            break;
+                        }
 
-					list.Add(new Index(chessPieceIndex.X, chessPieceIndex.Y + i));
+                        list.Add(new Index(chessPieceIndex.X, chessPieceIndex.Y + i));
+                    }
+                    catch(System.IndexOutOfRangeException e)
+                    {
+                        i = 1;
+                        break;
+                    }
 
 					if (++i >= 8)
 					{
@@ -359,7 +391,6 @@ public class GameManager : MonoBehaviour
 						right = false;
 					}
 				}
-				Debug.Log("size : " + list.Count);
 				break;
             default:
                 Debug.Log("chess piece type is Normal");
