@@ -7,11 +7,11 @@ public class Player
 	public ChessPiece currentChessPiece;
 	public bool isTurn;
     public int pawnCount;
-    private ChessPiece king;
+    public bool isKingAlive;
+    public ChessPiece king;
     private List<ChessPiece> chessPieces;
     private int[] chessPieceRemains;
-    private bool isKingAlive;
-
+    
     public Player(int number)
     {
         Number = number;
@@ -24,7 +24,7 @@ public class Player
 
         chessPieces = new List<ChessPiece>();
 
-        chessPieceRemains = new int[5];
+        chessPieceRemains = new int[6];
         chessPieceRemains[(int)ChessPieceType.Pawn] = 8;
         chessPieceRemains[(int)ChessPieceType.Rook] = 2;
         chessPieceRemains[(int)ChessPieceType.Knight] = 2;
@@ -36,7 +36,18 @@ public class Player
         pawnCount = 8;
     }
 
-	public void StartTurn()
+    public void ResetPlayerInfo()
+    {
+        foreach (ChessPiece chessPiece in chessPieces)
+        {
+            chessPiece.PerformDestroyEvent();
+        }
+
+        chessPieces.Clear();
+        SetPlayerInfo();
+    }
+
+    public void StartTurn()
 	{
 		Debug.Log("Player " + Number + "'s turn Start");
 		isTurn = true;
@@ -64,11 +75,33 @@ public class Player
         chessPiece.SetOwner(this);
     }
 
+    public void AddKing(ChessPiece chessPieceKing)
+    {
+        king = chessPieceKing;
+        chessPieceKing.SetOwner(this);
+        chessPieceKing.ChangeTypeTo(ChessPieceType.King);
+    }
+
 	public void MinusChessPiece(ChessPiece chessPiece)
 	{
-		// King을 Chess Piece Type에 넣어서 if문으로 구분할지 아니면 따로 만들지
-
-		chessPieceRemains[(int)chessPiece.Type]--;
-		chessPieces.Remove(chessPiece);
+        if (chessPiece == king)
+        {
+            isKingAlive = false;
+        }
+        else if(chessPiece.Type == ChessPieceType.Normal)
+        {
+            int randomNumber = Random.Range(0, 4);
+            while (chessPieceRemains[randomNumber] <= 0)
+            {
+                randomNumber = Random.Range(0, 4);
+            }
+            chessPieceRemains[randomNumber]--;
+            chessPieces.Remove(chessPiece);
+        }
+        else
+        {
+            chessPieceRemains[(int)chessPiece.Type]--;
+            chessPieces.Remove(chessPiece);
+        }
 	}
 }

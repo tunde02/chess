@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public enum ChessPieceType { Pawn, Rook, Knight, Bishop, Queen, Normal }
+public enum ChessPieceType { Pawn, Rook, Knight, Bishop, Queen, Normal, King }
 
 public class ChessPiece : MonoBehaviour
 {
@@ -16,7 +16,7 @@ public class ChessPiece : MonoBehaviour
     public float moveSpeed = 0.09f;
     public Material whiteColor;
 
-    public ChessPieceType Type { get; set; }
+    public ChessPieceType Type = ChessPieceType.Normal;
     public State state;
     public string Status { get; set; }
     private GameManager gm;
@@ -25,15 +25,15 @@ public class ChessPiece : MonoBehaviour
 
 	private void Start()
 	{
-		for (int i = 0; i < 6; i++)
+		for (int i = 0; i < 7; i++)
 		{
 			forms[i] = transform.GetChild(i).gameObject;
 		}
-		
-		Type = ChessPieceType.Normal;
-		state = State.Stop;
-        Status = "original";
 
+        //Type = ChessPieceType.Normal;
+        state = State.Stop;
+        Status = "original";
+        
         if (owner.Number == 1)
         {
             ChangeColorTo(whiteColor);
@@ -110,13 +110,6 @@ public class ChessPiece : MonoBehaviour
     {
         owner = player;
 	}
-    
-	public void ChangeType()
-	{
-		forms[(int)Type].SetActive(false);
-		Type = (ChessPieceType)(((int)++Type) % 6);
-		forms[(int)Type].SetActive(true);
-	}
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -128,7 +121,7 @@ public class ChessPiece : MonoBehaviour
         }
     }
     
-    private void PerformDestroyEvent()
+    public void PerformDestroyEvent()
 	{
         ShowDestroyText();
 		Destroy(gameObject);

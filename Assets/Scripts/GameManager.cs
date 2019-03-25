@@ -15,9 +15,9 @@ public class GameManager : MonoBehaviour
     public Camera mainCamera;
     public SelectUIManager selectUIManager;
     public TextUIManager textUIManager;
+    public MenuUIManager menuUIManager;
     public GameObject chessBoard;
     public GameObject chessPieceClone;
-    public bool isTest;
 
     private GameObject target;
     private ChessPiece selectedChessPiece;
@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     private bool isConfirmed = false;
     private int turn = 0;
     private Player[] player = new Player[2];
+    private bool isOver = false;
 
 	private void Start()
 	{
@@ -47,6 +48,18 @@ public class GameManager : MonoBehaviour
         player[0].StartTurn();
     }
 
+    public void RestartGame()
+    {
+        player[0].ResetPlayerInfo();
+        player[1].ResetPlayerInfo();
+
+        CreateChessPieces();
+
+        menuUIManager.gameObject.SetActive(false);
+
+        isOver = true;
+    }
+
     private void CreateChessPieces()
     {
         for(int i=0; i<8; i++)
@@ -54,12 +67,26 @@ public class GameManager : MonoBehaviour
             for(int j=0; j<2; j++)
             {
                 Vector3 temp = squares[j, i].transform.position;
+
+                if (i == 4 && j == 0)
+                {
+                    player[0].AddKing(Instantiate(chessPieceClone, new Vector3(temp.x, temp.y + 1, temp.z), Quaternion.identity).GetComponent<ChessPiece>());
+                    continue;
+                }
+
                 player[0].AddChessPiece(Instantiate(chessPieceClone, new Vector3(temp.x, temp.y + 1, temp.z), Quaternion.identity).GetComponent<ChessPiece>());
             }
 
             for(int j=6; j<8; j++)
             {
                 Vector3 temp = squares[j, i].transform.position;
+
+                if (i == 4 && j == 7)
+                {
+                    player[1].AddKing(Instantiate(chessPieceClone, new Vector3(temp.x, temp.y + 1, temp.z), Quaternion.identity).GetComponent<ChessPiece>());
+                    continue;
+                }
+
                 player[1].AddChessPiece(Instantiate(chessPieceClone, new Vector3(temp.x, temp.y + 1, temp.z), Quaternion.identity).GetComponent<ChessPiece>());
             }
         }
@@ -67,13 +94,20 @@ public class GameManager : MonoBehaviour
 
 	private void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !selectUIManager.IsActive)
+        if (/*!isOver && */Input.GetMouseButtonDown(0) && !selectUIManager.IsActive)
         {
             if((target = GetClickedObject()) != null)
 			{
 				PerformSelectedEvent();
 			}
         }
+
+        //if(!player[0].isKingAlive || !player[1].isKingAlive)
+        //{
+        //    Debug.Log("gameover");
+        //    isOver = true;
+        //    PerformGameOver();
+        //}
     }
 
     private GameObject GetClickedObject()
@@ -788,5 +822,10 @@ public class GameManager : MonoBehaviour
         }
 
         textUIManager.ResetText();
+    }
+
+    private void PerformGameOver()
+    {
+        menuUIManager.gameObject.SetActive(true);
     }
 }
