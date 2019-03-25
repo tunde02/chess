@@ -269,133 +269,100 @@ public class GameManager : MonoBehaviour
                 }
                 break;
 			case ChessPieceType.Rook:
-				bool up = true, down = true, left = true, right = true;
-				int offset_Rook = 1;
+                bool[] checks_Rook = new bool[4];
 
-				while(up)
-				{
-                    try
+                for (int i = 1; i < 8; i++)
+                {
+                    if (!checks_Rook[0])
                     {
-                        if (squares[chessPieceIndex.X + offset_Rook, chessPieceIndex.Y].aboveChessPiece != null)
+                        try
                         {
-                            if (squares[chessPieceIndex.X + offset_Rook, chessPieceIndex.Y].aboveChessPiece.GetOwner() != player[turn])
+                            if (squares[chessPieceIndex.X + i, chessPieceIndex.Y].aboveChessPiece != null)
                             {
-                                list.Add(new Index(chessPieceIndex.X + offset_Rook, chessPieceIndex.Y));
+                                checks_Rook[0] = true;
+
+                                if (squares[chessPieceIndex.X + i, chessPieceIndex.Y].aboveChessPiece.GetOwner() != player[turn])
+                                {
+                                    list.Add(new Index(chessPieceIndex.X + i, chessPieceIndex.Y));
+                                }
                             }
-                            offset_Rook = 1;
-                            up = false;
-                            break;
+                            else
+                            {
+                                list.Add(new Index(chessPieceIndex.X + i, chessPieceIndex.Y));
+                            }
                         }
-
-                        list.Add(new Index(chessPieceIndex.X + offset_Rook, chessPieceIndex.Y));
-                    }
-                    catch(System.IndexOutOfRangeException)
-                    {
-                        offset_Rook = 1;
-                        break;
+                        catch (System.IndexOutOfRangeException) { }
                     }
 
-					if(++offset_Rook >= 8)
-					{
-						offset_Rook = 1;
-						up = false;
-					}
-				}
-
-				while (down)
-				{
-                    try
+                    if (!checks_Rook[1])
                     {
-                        if (squares[chessPieceIndex.X - offset_Rook, chessPieceIndex.Y].aboveChessPiece != null)
+                        try
                         {
-                            if (squares[chessPieceIndex.X - offset_Rook, chessPieceIndex.Y].aboveChessPiece.GetOwner() != player[turn])
+                            if (squares[chessPieceIndex.X - i, chessPieceIndex.Y].aboveChessPiece != null)
                             {
-                                list.Add(new Index(chessPieceIndex.X - offset_Rook, chessPieceIndex.Y));
+                                checks_Rook[1] = true;
+
+                                if (squares[chessPieceIndex.X - i, chessPieceIndex.Y].aboveChessPiece.GetOwner() != player[turn])
+                                {
+                                    list.Add(new Index(chessPieceIndex.X - i, chessPieceIndex.Y));
+                                }
                             }
-                            offset_Rook = 1;
-                            down = false;
-                            break;
+                            else
+                            {
+                                list.Add(new Index(chessPieceIndex.X - i, chessPieceIndex.Y));
+                            }
                         }
-
-                        list.Add(new Index(chessPieceIndex.X - offset_Rook, chessPieceIndex.Y));
-                    }
-                    catch(System.IndexOutOfRangeException)
-                    {
-                        offset_Rook = 1;
-                        break;
+                        catch (System.IndexOutOfRangeException) { }
                     }
 
-					if (++offset_Rook >= 8)
-					{
-						offset_Rook = 1;
-						down = false;
-					}
-				}
-
-				while (left)
-				{
-                    try
+                    if (!checks_Rook[2])
                     {
-                        if (squares[chessPieceIndex.X, chessPieceIndex.Y - offset_Rook].aboveChessPiece != null)
+                        try
                         {
-                            if (squares[chessPieceIndex.X, chessPieceIndex.Y - offset_Rook].aboveChessPiece.GetOwner() != player[turn])
+                            if (squares[chessPieceIndex.X, chessPieceIndex.Y - i].aboveChessPiece != null)
                             {
-                                list.Add(new Index(chessPieceIndex.X, chessPieceIndex.Y - offset_Rook));
+                                checks_Rook[2] = true;
+
+                                if (squares[chessPieceIndex.X, chessPieceIndex.Y - i].aboveChessPiece.GetOwner() != player[turn])
+                                {
+                                    list.Add(new Index(chessPieceIndex.X, chessPieceIndex.Y - i));
+                                }
                             }
-                            offset_Rook = 1;
-                            left = false;
-                            break;
+                            else
+                            {
+                                list.Add(new Index(chessPieceIndex.X, chessPieceIndex.Y - i));
+                            }
                         }
-
-                        list.Add(new Index(chessPieceIndex.X, chessPieceIndex.Y - offset_Rook));
-                    }
-                    catch(System.IndexOutOfRangeException)
-                    {
-                        offset_Rook = 1;
-                        break;
+                        catch (System.IndexOutOfRangeException) { }
                     }
 
-					if (++offset_Rook >= 8)
-					{
-						offset_Rook = 1;
-						left = false;
-					}
-				}
-
-				while (right)
-				{
-                    try
+                    if (!checks_Rook[3])
                     {
-                        if (squares[chessPieceIndex.X, chessPieceIndex.Y + offset_Rook].aboveChessPiece != null)
+                        try
                         {
-                            if (squares[chessPieceIndex.X, chessPieceIndex.Y + offset_Rook].aboveChessPiece.GetOwner() != player[turn])
+                            if (squares[chessPieceIndex.X, chessPieceIndex.Y + i].aboveChessPiece != null)
                             {
-                                list.Add(new Index(chessPieceIndex.X, chessPieceIndex.Y + offset_Rook));
+                                checks_Rook[3] = true;
+
+                                if (squares[chessPieceIndex.X, chessPieceIndex.Y + i].aboveChessPiece.GetOwner() != player[turn])
+                                {
+                                    list.Add(new Index(chessPieceIndex.X, chessPieceIndex.Y + i));
+                                }
                             }
-                            offset_Rook = 1;
-                            right = false;
-                            break;
+                            else
+                            {
+                                list.Add(new Index(chessPieceIndex.X, chessPieceIndex.Y + i));
+                            }
                         }
-
-                        list.Add(new Index(chessPieceIndex.X, chessPieceIndex.Y + offset_Rook));
+                        catch (System.IndexOutOfRangeException) { }
                     }
-                    catch (System.IndexOutOfRangeException)
-                    {
-                        offset_Rook = 1;
-                        break;
-                    }
-
-					if (++offset_Rook >= 8)
-					{
-						offset_Rook = 1;
-						right = false;
-					}
-				}
+                }
 				break;
             case ChessPieceType.Knight:
                 for (int i = 1; i < 3; i++)
                 {
                     int j = 3 - i;
+
                     try
                     {
                         if (squares[chessPieceIndex.X + i, chessPieceIndex.Y + j].aboveChessPiece.GetOwner() != player[turn])
@@ -417,7 +384,7 @@ public class GameManager : MonoBehaviour
                         }
                     }
                     catch (System.IndexOutOfRangeException) { }
-                    catch (System.NotFiniteNumberException)
+                    catch (System.NullReferenceException)
                     {
                         list.Add(new Index(chessPieceIndex.X + i, chessPieceIndex.Y - j));
                     }
@@ -439,29 +406,29 @@ public class GameManager : MonoBehaviour
                     {
                         if (squares[chessPieceIndex.X - i, chessPieceIndex.Y - j].aboveChessPiece.GetOwner() != player[turn])
                         {
-                            list.Add(new Index(chessPieceIndex.X - i, chessPieceIndex.Y + j));
+                            list.Add(new Index(chessPieceIndex.X - i, chessPieceIndex.Y - j));
                         }
                     }
                     catch (System.IndexOutOfRangeException) { }
                     catch (System.NullReferenceException)
                     {
-                        list.Add(new Index(chessPieceIndex.X - i, chessPieceIndex.Y + j));
+                        list.Add(new Index(chessPieceIndex.X - i, chessPieceIndex.Y - j));
                     }
                 }
                 
                 break;
             case ChessPieceType.Bishop:
-                bool[] checkes = new bool[4];
+                bool[] checks_Bishop = new bool[4];
 
                 for(int i=1; i<8; i++)
                 {
-                    if (!checkes[0])
+                    if (!checks_Bishop[0])
                     {
                         try
                         {
                             if (squares[chessPieceIndex.X + i, chessPieceIndex.Y + i].aboveChessPiece != null)
                             {
-                                checkes[0] = true;
+                                checks_Bishop[0] = true;
 
                                 if(squares[chessPieceIndex.X + i, chessPieceIndex.Y + i].aboveChessPiece.GetOwner() != player[turn])
                                 {
@@ -476,13 +443,13 @@ public class GameManager : MonoBehaviour
                         catch (System.IndexOutOfRangeException) { }
                     }
 
-                    if(!checkes[1])
+                    if(!checks_Bishop[1])
                     {
                         try
                         {
                             if (squares[chessPieceIndex.X + i, chessPieceIndex.Y - i].aboveChessPiece != null)
                             {
-                                checkes[1] = true;
+                                checks_Bishop[1] = true;
 
                                 if (squares[chessPieceIndex.X + i, chessPieceIndex.Y - i].aboveChessPiece.GetOwner() != player[turn])
                                 {
@@ -497,13 +464,13 @@ public class GameManager : MonoBehaviour
                         catch (System.IndexOutOfRangeException) { }
                     }
 
-                    if (!checkes[2])
+                    if (!checks_Bishop[2])
                     {
                         try
                         {
                             if (squares[chessPieceIndex.X - i, chessPieceIndex.Y + i].aboveChessPiece != null)
                             {
-                                checkes[2] = true;
+                                checks_Bishop[2] = true;
 
                                 if (squares[chessPieceIndex.X - i, chessPieceIndex.Y + i].aboveChessPiece.GetOwner() != player[turn])
                                 {
@@ -518,13 +485,13 @@ public class GameManager : MonoBehaviour
                         catch (System.IndexOutOfRangeException) { }
                     }
 
-                    if (!checkes[3])
+                    if (!checks_Bishop[3])
                     {
                         try
                         {
                             if (squares[chessPieceIndex.X - i, chessPieceIndex.Y - i].aboveChessPiece != null)
                             {
-                                checkes[3] = true;
+                                checks_Bishop[3] = true;
 
                                 if (squares[chessPieceIndex.X - i, chessPieceIndex.Y - i].aboveChessPiece.GetOwner() != player[turn])
                                 {
@@ -537,6 +504,194 @@ public class GameManager : MonoBehaviour
                             }
                         }
                         catch (System.IndexOutOfRangeException) { }
+                    }
+                }
+                break;
+            case ChessPieceType.Queen:
+                bool[] checks_Queen = new bool[8];
+
+                for(int i=0; i<8; i++)
+                {
+                    for(int j=0; j<8; j++)
+                    {
+                        if(i == 0 && j == 0) { continue; }
+
+                        if (j == 0)// UP, DOWN
+                        {
+                            if (!checks_Queen[0])
+                            {
+                                try
+                                {
+                                    if(squares[chessPieceIndex.X + i, chessPieceIndex.Y].aboveChessPiece != null)
+                                    {
+                                        checks_Queen[0] = true;
+
+                                        if(squares[chessPieceIndex.X + i, chessPieceIndex.Y].aboveChessPiece.GetOwner() != player[turn])
+                                        {
+                                            list.Add(new Index(chessPieceIndex.X + i, chessPieceIndex.Y));
+                                        }
+                                    }
+                                    else
+                                    {
+                                        list.Add(new Index(chessPieceIndex.X + i, chessPieceIndex.Y));
+                                    }
+                                }
+                                catch (System.IndexOutOfRangeException) { }
+                            }
+
+                            if (!checks_Queen[4])
+                            {
+                                try
+                                {
+                                    if (squares[chessPieceIndex.X - i, chessPieceIndex.Y].aboveChessPiece != null)
+                                    {
+                                        checks_Queen[4] = true;
+
+                                        if (squares[chessPieceIndex.X - i, chessPieceIndex.Y].aboveChessPiece.GetOwner() != player[turn])
+                                        {
+                                            list.Add(new Index(chessPieceIndex.X - i, chessPieceIndex.Y));
+                                        }
+                                    }
+                                    else
+                                    {
+                                        list.Add(new Index(chessPieceIndex.X - i, chessPieceIndex.Y));
+                                    }
+                                }
+                                catch (System.IndexOutOfRangeException) { }
+                            }
+                        }
+
+                        if(i == 0)// LEFT, RIGHT
+                        {
+                            if (!checks_Queen[6])
+                            {
+                                try
+                                {
+                                    if (squares[chessPieceIndex.X, chessPieceIndex.Y - j].aboveChessPiece != null)
+                                    {
+                                        checks_Queen[6] = true;
+
+                                        if (squares[chessPieceIndex.X, chessPieceIndex.Y - j].aboveChessPiece.GetOwner() != player[turn])
+                                        {
+                                            list.Add(new Index(chessPieceIndex.X, chessPieceIndex.Y - j));
+                                        }
+                                    }
+                                    else
+                                    {
+                                        list.Add(new Index(chessPieceIndex.X, chessPieceIndex.Y - j));
+                                    }
+                                }
+                                catch (System.IndexOutOfRangeException) { }
+                            }
+
+                            if (!checks_Queen[2])
+                            {
+                                try
+                                {
+                                    if (squares[chessPieceIndex.X, chessPieceIndex.Y + j].aboveChessPiece != null)
+                                    {
+                                        checks_Queen[2] = true;
+
+                                        if (squares[chessPieceIndex.X, chessPieceIndex.Y + j].aboveChessPiece.GetOwner() != player[turn])
+                                        {
+                                            list.Add(new Index(chessPieceIndex.X, chessPieceIndex.Y + j));
+                                        }
+                                    }
+                                    else
+                                    {
+                                        list.Add(new Index(chessPieceIndex.X, chessPieceIndex.Y + j));
+                                    }
+                                }
+                                catch (System.IndexOutOfRangeException) { }
+                            }
+                        }
+
+                        if(i == j)// y = x 그래프, y = -x 그래프
+                        {
+                            if (!checks_Queen[1])
+                            {
+                                try
+                                {
+                                    if (squares[chessPieceIndex.X + i, chessPieceIndex.Y + j].aboveChessPiece != null)
+                                    {
+                                        checks_Queen[1] = true;
+
+                                        if (squares[chessPieceIndex.X + i, chessPieceIndex.Y + j].aboveChessPiece.GetOwner() != player[turn])
+                                        {
+                                            list.Add(new Index(chessPieceIndex.X + i, chessPieceIndex.Y + j));
+                                        }
+                                    }
+                                    else
+                                    {
+                                        list.Add(new Index(chessPieceIndex.X + i, chessPieceIndex.Y + j));
+                                    }
+                                }
+                                catch (System.IndexOutOfRangeException) { }
+                            }
+
+                            if (!checks_Queen[5])
+                            {
+                                try
+                                {
+                                    if (squares[chessPieceIndex.X - i, chessPieceIndex.Y - j].aboveChessPiece != null)
+                                    {
+                                        checks_Queen[5] = true;
+
+                                        if (squares[chessPieceIndex.X - i, chessPieceIndex.Y - j].aboveChessPiece.GetOwner() != player[turn])
+                                        {
+                                            list.Add(new Index(chessPieceIndex.X - i, chessPieceIndex.Y - j));
+                                        }
+                                    }
+                                    else
+                                    {
+                                        list.Add(new Index(chessPieceIndex.X - i, chessPieceIndex.Y - j));
+                                    }
+                                }
+                                catch (System.IndexOutOfRangeException) { }
+                            }
+
+                            if (!checks_Queen[7])
+                            {
+                                try
+                                {
+                                    if (squares[chessPieceIndex.X + i, chessPieceIndex.Y - j].aboveChessPiece != null)
+                                    {
+                                        checks_Queen[7] = true;
+
+                                        if (squares[chessPieceIndex.X + i, chessPieceIndex.Y - j].aboveChessPiece.GetOwner() != player[turn])
+                                        {
+                                            list.Add(new Index(chessPieceIndex.X + i, chessPieceIndex.Y - j));
+                                        }
+                                    }
+                                    else
+                                    {
+                                        list.Add(new Index(chessPieceIndex.X + i, chessPieceIndex.Y - j));
+                                    }
+                                }
+                                catch (System.IndexOutOfRangeException) { }
+                            }
+
+                            if (!checks_Queen[3])
+                            {
+                                try
+                                {
+                                    if (squares[chessPieceIndex.X - i, chessPieceIndex.Y + j].aboveChessPiece != null)
+                                    {
+                                        checks_Queen[3] = true;
+
+                                        if (squares[chessPieceIndex.X - i, chessPieceIndex.Y + j].aboveChessPiece.GetOwner() != player[turn])
+                                        {
+                                            list.Add(new Index(chessPieceIndex.X - i, chessPieceIndex.Y + j));
+                                        }
+                                    }
+                                    else
+                                    {
+                                        list.Add(new Index(chessPieceIndex.X - i, chessPieceIndex.Y + j));
+                                    }
+                                }
+                                catch (System.IndexOutOfRangeException) { }
+                            }
+                        }
                     }
                 }
                 break;
