@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -252,7 +252,7 @@ MonoBehaviour:
   chessBoard: {fileID: 225938912}
   chessPieceClone: {fileID: 5068100458328091636, guid: 4d9302d47724b8e43b38ec287279a226,
     type: 3}
-  isTest: 1
+  isTest: 0
 --- !u!1001 &77749974
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -268,6 +268,99 @@ public class GameManager : MonoBehaviour
                     }
                 }
                 break;
+			case ChessPieceType.Rook:
+				bool up = true, down = true, left = true, right = true;
+				int i = 1;
+
+				while(up)
+				{
+					if(squares[chessPieceIndex.X + i, chessPieceIndex.Y].aboveChessPiece != null)
+					{
+						if(squares[chessPieceIndex.X + i, chessPieceIndex.Y].aboveChessPiece.GetOwner() != player[turn])
+						{
+							list.Add(new Index(chessPieceIndex.X + i, chessPieceIndex.Y));
+						}
+						i = 1;
+						up = false;
+						break;
+					}
+
+					list.Add(new Index(chessPieceIndex.X + i, chessPieceIndex.Y));
+
+					if(++i >= 8)
+					{
+						i = 1;
+						up = false;
+					}
+				}
+
+				while (down)
+				{
+					if (squares[chessPieceIndex.X - i, chessPieceIndex.Y].aboveChessPiece != null)
+					{
+						if (squares[chessPieceIndex.X - i, chessPieceIndex.Y].aboveChessPiece.GetOwner() != player[turn])
+						{
+							list.Add(new Index(chessPieceIndex.X - i, chessPieceIndex.Y));
+						}
+						i = 1;
+						down = false;
+						break;
+					}
+
+					list.Add(new Index(chessPieceIndex.X - i, chessPieceIndex.Y));
+
+					if (++i >= 8)
+					{
+						i = 1;
+						down = false;
+					}
+				}
+
+				while (left)
+				{
+					if (squares[chessPieceIndex.X, chessPieceIndex.Y - i].aboveChessPiece != null)
+					{
+						if (squares[chessPieceIndex.X, chessPieceIndex.Y - i].aboveChessPiece.GetOwner() != player[turn])
+						{
+							list.Add(new Index(chessPieceIndex.X, chessPieceIndex.Y - i));
+						}
+						i = 1;
+						left = false;
+						break;
+					}
+
+					list.Add(new Index(chessPieceIndex.X, chessPieceIndex.Y - i));
+
+					if (++i >= 8)
+					{
+						i = 1;
+						left = false;
+					}
+				}
+
+				while (right)
+				{
+					if (squares[chessPieceIndex.X, chessPieceIndex.Y + i].aboveChessPiece != null)
+					{
+						if (squares[chessPieceIndex.X, chessPieceIndex.Y + i].aboveChessPiece.GetOwner() != player[turn])
+						{
+							list.Add(new Index(chessPieceIndex.X, chessPieceIndex.Y + i));
+						}
+						i = 1;
+						right = false;
+						break;
+					}
+
+					list.Add(new Index(chessPieceIndex.X, chessPieceIndex.Y + i));
+
+					if (++i >= 8)
+					{
+						i = 1;
+						right = false;
+					}
+				}
+				Debug.Log("size : " + list.Count);
+				break;
             default:
                 Debug.Log("chess piece type is Normal");
                 break;
