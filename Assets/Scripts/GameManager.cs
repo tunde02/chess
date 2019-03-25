@@ -92,64 +92,80 @@ public class GameManager : MonoBehaviour
     }
 
 	private void PerformSelectedEvent()
-	{
-		if (target.tag == "Chess Piece Element")
-		{
-            Debug.Log("You Clicked " + target);
-
-            ChessPiece targetChessPiece = target.transform.parent.GetComponent<ChessPiece>();
-
-			if (isConfirmed && player[turn].currentChessPiece.state == ChessPiece.State.Move)
-			{
-				return;
-			}
-
-			if (targetChessPiece.GetOwner() == player[turn])
+    {
+        if (target.tag == "Board Element")
+        {
+            if (isConfirmed)
             {
-				selectedChessPiece = targetChessPiece;
-
-                if (player[turn].currentChessPiece != null)
+                if (target.GetComponent<Square>().status == "possible")
                 {
-                    selectUIManager.OpenUI(player[turn].GetChessPieceRemains(), player[turn].currentChessPiece.Type);
+                    Debug.Log("Chess piece move!");
+
+                    player[turn].currentChessPiece.MoveTo(target.transform.position);
+                    StartCoroutine(WaitTurn());
+
+                    ResetPossibleSquares();
                 }
                 else
                 {
-                    selectUIManager.OpenUI(player[turn].GetChessPieceRemains(), ChessPieceType.Normal);
+                    Debug.Log("Chess piece can't go to there!");
                 }
-			}
-			else
-            {
-				Debug.Log("You Clicked Wrong Chess Piece");
-			}
-		}
-		else if (target.tag == "Board Element")
-		{
-			if (isConfirmed)
-			{
-				if (target.GetComponent<Square>().status == "possible")
-				{
-					Debug.Log("Chess piece move!");
-
-
-					player[turn].currentChessPiece.MoveTo(target.transform.position);
-					StartCoroutine(WaitTurn());
-
-					ResetPossibleSquares();
-				}
-				else
-				{
-					Debug.Log("Chess piece can't go to there!");
-				}
-			}
+            }
             else
             {
                 Debug.Log("Select Chess Piece, First");
             }
-		}
-		else
-		{
-			Debug.Log("something selected!");
-		}
+        }
+        else if (target.tag == "Chess Piece Element")
+        {
+            ChessPiece targetChessPiece = target.transform.parent.GetComponent<ChessPiece>();
+
+            if(targetChessPiece.Status == "possible")
+            {
+                Square tempSquare = null;
+                for(int i=0; i<possibleSquares.Count; i++)
+                {
+                    if(squares[possibleSquares[i].X, possibleSquares[i].Y].aboveChessPiece == targetChessPiece)
+                    {
+                        tempSquare = squares[possibleSquares[i].X, possibleSquares[i].Y];
+                    }
+                }
+
+                player[turn].currentChessPiece.MoveTo(tempSquare.transform.position);
+                StartCoroutine(WaitTurn());
+
+                ResetPossibleSquares();
+            }
+            else
+            {
+                if (isConfirmed && player[turn].currentChessPiece.state == ChessPiece.State.Move)
+                {
+                    return;
+                }
+
+                if (targetChessPiece.GetOwner() == player[turn])
+                {
+                    selectedChessPiece = targetChessPiece;
+
+                    if (player[turn].currentChessPiece != null)
+                    {
+                        selectUIManager.OpenUI(player[turn].GetChessPieceRemains(), player[turn].currentChessPiece.Type);
+                    }
+                    else
+                    {
+                        selectUIManager.OpenUI(player[turn].GetChessPieceRemains(), ChessPieceType.Normal);
+                    }
+                }
+                else
+                {
+                    Debug.Log("You Clicked Wrong Chess Piece");
+                }
+            }
+        }
+        else
+        {
+            Debug.Log("something selected!");
+        }
 	}
 
     private IEnumerator WaitTurn()
@@ -170,58 +186,20 @@ public class GameManager : MonoBehaviour
 
     public void OnChessPieceTypeButtonClicked()
     {
-        selectedChessPiece.ChangeTypeTo(selectUIManager.GetSelectedChessPieceType());
-        UpdatePossibleSquares(selectedChessPiece);
+        if (player[turn].GetChessPieceRemains()[(int)selectUIManager.GetSelectedChessPieceType()] > 0)
+        {
+            selectedChessPiece.ChangeTypeTo(selectUIManager.GetSelectedChessPieceType());
+            UpdatePossibleSquares(selectedChessPiece);
+        }
     }
 
     private void UpdatePossibleSquares(ChessPiece chessPiece)
     {
-        // TODO: Chess Piece Type에 따른 possible squares 구현 (index를 이용해서)
-
-        Debug.Log("Update Possible Squares About " + chessPiece.Type);
-        Debug.Log(MeasureIndex(chessPiece).X + ", " + MeasureIndex(chessPiece).Y);
         ResetPossibleSquares();
-
-        Index index;
-
-        if (isTest)
-        {
-            switch (chessPiece.Type)
-            {
-                case ChessPieceType.Pawn:
-                    index = new Index(3, 1);
-                    possibleSquares.Add(index);
-                    squares[index.X, index.Y].ChangeToSelectedMaterial();
-                    break;
-                case ChessPieceType.Rook:
-                    index = new Index(3, 2);
-                    possibleSquares.Add(index);
-                    squares[index.X, index.Y].ChangeToSelectedMaterial();
-                    break;
-                case ChessPieceType.Knight:
-                    index = new Index(3, 3);
-                    possibleSquares.Add(index);
-                    squares[index.X, index.Y].ChangeToSelectedMaterial();
-                    break;
-                case ChessPieceType.Bishop:
-                    index = new Index(3, 4);
-                    possibleSquares.Add(index);
-                    squares[index.X, index.Y].ChangeToSelectedMaterial();
-                    break;
-                case ChessPieceType.Queen:
-                    index = new Index(3, 5);
-                    possibleSquares.Add(index);
-                    squares[index.X, index.Y].ChangeToSelectedMaterial();
-                    break;
-                default:
-                    break;
-            }
-            return;
-        }
 
         Index chessPieceIndex = MeasureIndex(chessPiece);
         List<Index> list = new List<Index>();
-        //Index index;
+        Index index;
 
         switch (chessPiece.Type)
         {
@@ -237,6 +215,7 @@ public class GameManager : MonoBehaviour
                 {
                     // 일반 이동
                     index = new Index(turn == 0 ? chessPieceIndex.X + 1 : chessPieceIndex.X - 1, chessPieceIndex.Y);
+
                     if (!IsChessPieceThere(index))
                     {
                         list.Add(index);
@@ -261,6 +240,7 @@ public class GameManager : MonoBehaviour
                     {
                         list.Add(leftCase);
                     }
+
                     if (IsChessPieceThere(rightCase)
                         && !squares[rightCase.X, rightCase.Y].aboveChessPiece.GetOwner().isTurn)
                     {

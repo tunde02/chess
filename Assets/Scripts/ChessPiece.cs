@@ -5,19 +5,20 @@ public enum ChessPieceType { Pawn, Rook, Knight, Bishop, Queen, Normal }
 
 public class ChessPiece : MonoBehaviour
 {
-	public enum State
-	{
-		Stop,
-		Move
-	}
+    public enum State
+    {
+        Stop,
+        Move
+    }
 
-	public GameObject[] forms;// 체스말의 종류를 바꿀 때 사용할 배열
+    public GameObject[] forms;// 체스말의 종류를 바꿀 때 사용할 배열
     public float maxHeight = 3.0f;
     public float moveSpeed = 0.09f;
-    public Material whiteColor;// default color = black
+    public Material whiteColor;
 
-	public ChessPieceType Type { get; set; }
-	public State state;
+    public ChessPieceType Type { get; set; }
+    public State state;
+    public string Status { get; set; }
     private GameManager gm;
     private Player owner;
     private int destroyCount = 1;
@@ -31,10 +32,11 @@ public class ChessPiece : MonoBehaviour
 		
 		Type = ChessPieceType.Normal;
 		state = State.Stop;
+        Status = "original";
 
         if (owner.Number == 1)
         {
-            ChangeColorToWhite();
+            ChangeColorTo(whiteColor);
         }
 
         gm = FindObjectOfType<GameManager>();
@@ -85,17 +87,17 @@ public class ChessPiece : MonoBehaviour
         // 흰 색 플레이어일 경우 색을 바꿔준다
         if (owner.Number == 1)
         {
-            ChangeColorToWhite();
+            ChangeColorTo(whiteColor);
         }
     }
 
-    private void ChangeColorToWhite()
+    public void ChangeColorTo(Material material)
     {
         MeshRenderer[] renderers = forms[(int)Type].GetComponentsInChildren<MeshRenderer>();
 
         for (int i = 0; i < renderers.Length; i++)
         {
-            renderers[i].material = whiteColor;
+            renderers[i].material = material;
         }
     }
 

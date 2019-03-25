@@ -4,11 +4,14 @@ using UnityEngine;
 public class Square : MonoBehaviour
 {
     public Material selectedMaterial;
+    public Material blackMaterial;
+    public Material whiteMaterial;
 
     public string status;
     public ChessPiece aboveChessPiece;
     private MeshRenderer render;
     private Material originalMaterial;
+    
 	
     private void Start()
     {
@@ -20,13 +23,23 @@ public class Square : MonoBehaviour
     public void ChangeToSelectedMaterial()
     {
         render.material = selectedMaterial;
+        if(aboveChessPiece != null)
+        {
+            aboveChessPiece.ChangeColorTo(selectedMaterial);
+            aboveChessPiece.Status = "possible";
+        }
 		status = "possible";
     }
 
     public void ChangeToOriginalMaterial()
     {
         render.material = originalMaterial;
-		status = "original";
+        if (aboveChessPiece != null)
+        {
+            aboveChessPiece.ChangeColorTo(aboveChessPiece.GetOwner().Number == 0 ? blackMaterial : whiteMaterial);
+            aboveChessPiece.Status = "original";
+        }
+        status = "original";
     }
 
 	private void OnCollisionEnter(Collision collision)

@@ -106,3 +106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectedMaterial: {fileID: 2100000, guid: 9bf955e4d317e754db11ebefef6ad54a, type: 2}
+  blackMaterial: {fileID: 2100000, guid: cc1cbcca85c3d7c4ea4f60184834964b, type: 2}
+  whiteMaterial: {fileID: 2100000, guid: af6ac6fb839ea3240a0624f9709f5fbc, type: 2}
+  status: 
+  aboveChessPiece: {fileID: 0}
