@@ -43,6 +43,11 @@ public class Player
             chessPiece.PerformDestroyEvent();
         }
 
+        if (isKingAlive)
+        {
+            king.PerformDestroyEvent();
+        }
+
         chessPieces.Clear();
         SetPlayerInfo();
     }
@@ -75,17 +80,18 @@ public class Player
         chessPiece.SetOwner(this);
     }
 
-    //public void AddKing(ChessPiece chessPieceKing)
-    //{
-    //    king = chessPieceKing;
-    //    chessPieceKing.SetOwner(this);
-    //    chessPieceKing.ChangeTypeTo(ChessPieceType.King);
-    //}
+    public void AddKing(ChessPiece chessPieceKing)
+    {
+        king = chessPieceKing;
+        chessPieceKing.SetOwner(this);
+        chessPieceKing.ChangeTypeTo(ChessPieceType.King);
+    }
 
-	public void MinusChessPiece(ChessPiece chessPiece)
+    public void MinusChessPiece(ChessPiece chessPiece)
 	{
-        if (chessPiece == king)
+        if (chessPiece.Type == ChessPieceType.King)
         {
+            Debug.Log(Number + "'s king dead");
             isKingAlive = false;
         }
         else if(chessPiece.Type == ChessPieceType.Normal)

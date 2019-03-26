@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public enum ChessPieceType { Pawn, Rook, Knight, Bishop, Queen, Normal/*, King*/ }
+public enum ChessPieceType { Pawn, Rook, Knight, Bishop, Queen, Normal, King }
 
 public class ChessPiece : MonoBehaviour
 {
@@ -25,12 +25,11 @@ public class ChessPiece : MonoBehaviour
 
 	private void Start()
 	{
-		for (int i = 0; i < 6; i++)
+		for (int i = 0; i < 7; i++)
 		{
 			forms[i] = transform.GetChild(i).gameObject;
 		}
-
-        //Type = ChessPieceType.Normal;
+        
         state = State.Stop;
         Status = "original";
         
@@ -80,10 +79,8 @@ public class ChessPiece : MonoBehaviour
     public void ChangeTypeTo(ChessPieceType newType)
 	{
 		// type에 맞는 체스말로 변경
-		Debug.Log("Change Type");
-		forms[(int)newType].SetActive(true);
-		forms[(int)Type].SetActive(false);
-        
+        forms[(int)Type].SetActive(false);
+        forms[(int)newType].SetActive(true);
 		Debug.Log("Before : " + Type + " / After : " + newType);
         Type = newType;
 
@@ -128,18 +125,19 @@ public class ChessPiece : MonoBehaviour
     {
         if (collision.gameObject.tag == "Chess Piece Element" && !owner.isTurn && destroyCount > 0)
         {
-            //if (Type == ChessPieceType.King)
-            //{
-            //    --destroyCount;
-            //    PerformDestroyEvent();
-            //    gm.PerformGameOver();
-            //}
-            //else
-            //{
+            if (Type == ChessPieceType.King)
+            {
+                gm.PerformGameOver();
                 --destroyCount;
                 owner.MinusChessPiece(this);
                 PerformDestroyEvent();
-            //}
+            }
+            else
+            {
+                --destroyCount;
+                owner.MinusChessPiece(this);
+                PerformDestroyEvent();
+            }
         }
     }
     

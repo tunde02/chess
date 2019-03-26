@@ -57,7 +57,11 @@ public class GameManager : MonoBehaviour
 
         menuUIManager.gameObject.SetActive(false);
 
-        isOver = true;
+        turn = 0;
+        player[0].StartTurn();
+        player[1].EndTurn();
+
+        isOver = false;
     }
 
     private void CreateChessPieces()
@@ -68,11 +72,12 @@ public class GameManager : MonoBehaviour
             {
                 Vector3 temp = squares[j, i].transform.position;
 
-                //if (i == 4 && j == 0)
-                //{
-                //    player[0].AddKing(Instantiate(chessPieceClone, new Vector3(temp.x, temp.y + 1, temp.z), Quaternion.identity).GetComponent<ChessPiece>());
-                //    continue;
-                //}
+                if (i == 4 && j == 0)
+                {
+                    player[0].AddKing(Instantiate(chessPieceClone, new Vector3(temp.x, temp.y + 1, temp.z), Quaternion.identity).GetComponent<ChessPiece>());
+                    Debug.Log(player[0].king.GetOwner().Number);
+                    continue;
+                }
 
                 player[0].AddChessPiece(Instantiate(chessPieceClone, new Vector3(temp.x, temp.y + 1, temp.z), Quaternion.identity).GetComponent<ChessPiece>());
             }
@@ -81,11 +86,12 @@ public class GameManager : MonoBehaviour
             {
                 Vector3 temp = squares[j, i].transform.position;
 
-                //if (i == 4 && j == 7)
-                //{
-                //    player[1].AddKing(Instantiate(chessPieceClone, new Vector3(temp.x, temp.y + 1, temp.z), Quaternion.identity).GetComponent<ChessPiece>());
-                //    continue;
-                //}
+                if (i == 4 && j == 7)
+                {
+                    player[1].AddKing(Instantiate(chessPieceClone, new Vector3(temp.x, temp.y + 1, temp.z), Quaternion.identity).GetComponent<ChessPiece>());
+                    Debug.Log(player[1].king.GetOwner().Number);
+                    continue;
+                }
 
                 player[1].AddChessPiece(Instantiate(chessPieceClone, new Vector3(temp.x, temp.y + 1, temp.z), Quaternion.identity).GetComponent<ChessPiece>());
             }
@@ -94,20 +100,13 @@ public class GameManager : MonoBehaviour
 
 	private void Update()
     {
-        if (/*!isOver && */Input.GetMouseButtonDown(0) && !selectUIManager.IsActive)
+        if (!isOver && Input.GetMouseButtonDown(0) && !selectUIManager.IsActive)
         {
             if((target = GetClickedObject()) != null)
 			{
 				PerformSelectedEvent();
 			}
         }
-
-        //if(!player[0].isKingAlive || !player[1].isKingAlive)
-        //{
-        //    Debug.Log("gameover");
-        //    isOver = true;
-        //    PerformGameOver();
-        //}
     }
 
     private GameObject GetClickedObject()
@@ -172,6 +171,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
+                // Chess Piece가 움직이는 중이라면 무시
                 if (isConfirmed && player[turn].currentChessPiece.state == ChessPiece.State.Move)
                 {
                     return;
@@ -181,15 +181,15 @@ public class GameManager : MonoBehaviour
                 {
                     selectedChessPiece = targetChessPiece;
 
-                    //if (selectedChessPiece.Type == ChessPieceType.King)
-                    //{
-                    //    player[turn].currentChessPiece = selectedChessPiece;
-                    //    selectedChessPiece = null;
-                    //    isConfirmed = true;
-                    //    UpdatePossibleSquares(player[turn].currentChessPiece);
-                    //}
-                    //else
-                    //{
+                    if (selectedChessPiece.Type == ChessPieceType.King)
+                    {
+                        player[turn].currentChessPiece = selectedChessPiece;
+                        selectedChessPiece = null;
+                        isConfirmed = true;
+                        UpdatePossibleSquares(player[turn].currentChessPiece);
+                    }
+                    else
+                    {
                         if (player[turn].currentChessPiece != null)
                         {
                             selectUIManager.OpenUI(player[turn].GetChessPieceRemains(), player[turn].currentChessPiece.Type);
@@ -198,7 +198,7 @@ public class GameManager : MonoBehaviour
                         {
                             selectUIManager.OpenUI(player[turn].GetChessPieceRemains(), ChessPieceType.Normal);
                         }
-                    //}
+                    }
                 }
                 else
                 {
@@ -308,7 +308,7 @@ public class GameManager : MonoBehaviour
                             {
                                 checks_Rook[0] = true;
 
-                                if (squares[chessPieceIndex.X + i, chessPieceIndex.Y].aboveChessPiece.GetOwner() != player[turn])
+                                if (!squares[chessPieceIndex.X + i, chessPieceIndex.Y].aboveChessPiece.GetOwner().isTurn)
                                 {
                                     list.Add(new Index(chessPieceIndex.X + i, chessPieceIndex.Y));
                                 }
@@ -329,7 +329,7 @@ public class GameManager : MonoBehaviour
                             {
                                 checks_Rook[1] = true;
 
-                                if (squares[chessPieceIndex.X - i, chessPieceIndex.Y].aboveChessPiece.GetOwner() != player[turn])
+                                if (!squares[chessPieceIndex.X - i, chessPieceIndex.Y].aboveChessPiece.GetOwner().isTurn)
                                 {
                                     list.Add(new Index(chessPieceIndex.X - i, chessPieceIndex.Y));
                                 }
@@ -350,7 +350,7 @@ public class GameManager : MonoBehaviour
                             {
                                 checks_Rook[2] = true;
 
-                                if (squares[chessPieceIndex.X, chessPieceIndex.Y - i].aboveChessPiece.GetOwner() != player[turn])
+                                if (!squares[chessPieceIndex.X, chessPieceIndex.Y - i].aboveChessPiece.GetOwner().isTurn)
                                 {
                                     list.Add(new Index(chessPieceIndex.X, chessPieceIndex.Y - i));
                                 }
@@ -371,7 +371,7 @@ public class GameManager : MonoBehaviour
                             {
                                 checks_Rook[3] = true;
 
-                                if (squares[chessPieceIndex.X, chessPieceIndex.Y + i].aboveChessPiece.GetOwner() != player[turn])
+                                if (!squares[chessPieceIndex.X, chessPieceIndex.Y + i].aboveChessPiece.GetOwner().isTurn)
                                 {
                                     list.Add(new Index(chessPieceIndex.X, chessPieceIndex.Y + i));
                                 }
@@ -392,7 +392,7 @@ public class GameManager : MonoBehaviour
 
                     try
                     {
-                        if (squares[chessPieceIndex.X + i, chessPieceIndex.Y + j].aboveChessPiece.GetOwner() != player[turn])
+                        if (!squares[chessPieceIndex.X + i, chessPieceIndex.Y + j].aboveChessPiece.GetOwner().isTurn)
                         {
                             list.Add(new Index(chessPieceIndex.X + i, chessPieceIndex.Y + j));
                         }
@@ -405,7 +405,7 @@ public class GameManager : MonoBehaviour
 
                     try
                     {
-                        if (squares[chessPieceIndex.X + i, chessPieceIndex.Y - j].aboveChessPiece.GetOwner() != player[turn])
+                        if (!squares[chessPieceIndex.X + i, chessPieceIndex.Y - j].aboveChessPiece.GetOwner().isTurn)
                         {
                             list.Add(new Index(chessPieceIndex.X + i, chessPieceIndex.Y - j));
                         }
@@ -418,7 +418,7 @@ public class GameManager : MonoBehaviour
 
                     try
                     {
-                        if (squares[chessPieceIndex.X - i, chessPieceIndex.Y + j].aboveChessPiece.GetOwner() != player[turn])
+                        if (!squares[chessPieceIndex.X - i, chessPieceIndex.Y + j].aboveChessPiece.GetOwner().isTurn)
                         {
                             list.Add(new Index(chessPieceIndex.X - i, chessPieceIndex.Y + j));
                         }
@@ -431,7 +431,7 @@ public class GameManager : MonoBehaviour
 
                     try
                     {
-                        if (squares[chessPieceIndex.X - i, chessPieceIndex.Y - j].aboveChessPiece.GetOwner() != player[turn])
+                        if (!squares[chessPieceIndex.X - i, chessPieceIndex.Y - j].aboveChessPiece.GetOwner().isTurn)
                         {
                             list.Add(new Index(chessPieceIndex.X - i, chessPieceIndex.Y - j));
                         }
@@ -457,7 +457,7 @@ public class GameManager : MonoBehaviour
                             {
                                 checks_Bishop[0] = true;
 
-                                if(squares[chessPieceIndex.X + i, chessPieceIndex.Y + i].aboveChessPiece.GetOwner() != player[turn])
+                                if(!squares[chessPieceIndex.X + i, chessPieceIndex.Y + i].aboveChessPiece.GetOwner().isTurn)
                                 {
                                     list.Add(new Index(chessPieceIndex.X + i, chessPieceIndex.Y + i));
                                 }
@@ -478,7 +478,7 @@ public class GameManager : MonoBehaviour
                             {
                                 checks_Bishop[1] = true;
 
-                                if (squares[chessPieceIndex.X + i, chessPieceIndex.Y - i].aboveChessPiece.GetOwner() != player[turn])
+                                if (!squares[chessPieceIndex.X + i, chessPieceIndex.Y - i].aboveChessPiece.GetOwner().isTurn)
                                 {
                                     list.Add(new Index(chessPieceIndex.X + i, chessPieceIndex.Y - i));
                                 }
@@ -499,7 +499,7 @@ public class GameManager : MonoBehaviour
                             {
                                 checks_Bishop[2] = true;
 
-                                if (squares[chessPieceIndex.X - i, chessPieceIndex.Y + i].aboveChessPiece.GetOwner() != player[turn])
+                                if (!squares[chessPieceIndex.X - i, chessPieceIndex.Y + i].aboveChessPiece.GetOwner().isTurn)
                                 {
                                     list.Add(new Index(chessPieceIndex.X - i, chessPieceIndex.Y + i));
                                 }
@@ -520,7 +520,7 @@ public class GameManager : MonoBehaviour
                             {
                                 checks_Bishop[3] = true;
 
-                                if (squares[chessPieceIndex.X - i, chessPieceIndex.Y - i].aboveChessPiece.GetOwner() != player[turn])
+                                if (!squares[chessPieceIndex.X - i, chessPieceIndex.Y - i].aboveChessPiece.GetOwner().isTurn)
                                 {
                                     list.Add(new Index(chessPieceIndex.X - i, chessPieceIndex.Y - i));
                                 }
@@ -553,7 +553,7 @@ public class GameManager : MonoBehaviour
                                     {
                                         checks_Queen[0] = true;
 
-                                        if(squares[chessPieceIndex.X + i, chessPieceIndex.Y].aboveChessPiece.GetOwner() != player[turn])
+                                        if(!squares[chessPieceIndex.X + i, chessPieceIndex.Y].aboveChessPiece.GetOwner().isTurn)
                                         {
                                             list.Add(new Index(chessPieceIndex.X + i, chessPieceIndex.Y));
                                         }
@@ -574,7 +574,7 @@ public class GameManager : MonoBehaviour
                                     {
                                         checks_Queen[4] = true;
 
-                                        if (squares[chessPieceIndex.X - i, chessPieceIndex.Y].aboveChessPiece.GetOwner() != player[turn])
+                                        if (!squares[chessPieceIndex.X - i, chessPieceIndex.Y].aboveChessPiece.GetOwner().isTurn)
                                         {
                                             list.Add(new Index(chessPieceIndex.X - i, chessPieceIndex.Y));
                                         }
@@ -598,7 +598,7 @@ public class GameManager : MonoBehaviour
                                     {
                                         checks_Queen[6] = true;
 
-                                        if (squares[chessPieceIndex.X, chessPieceIndex.Y - j].aboveChessPiece.GetOwner() != player[turn])
+                                        if (!squares[chessPieceIndex.X, chessPieceIndex.Y - j].aboveChessPiece.GetOwner().isTurn)
                                         {
                                             list.Add(new Index(chessPieceIndex.X, chessPieceIndex.Y - j));
                                         }
@@ -619,7 +619,7 @@ public class GameManager : MonoBehaviour
                                     {
                                         checks_Queen[2] = true;
 
-                                        if (squares[chessPieceIndex.X, chessPieceIndex.Y + j].aboveChessPiece.GetOwner() != player[turn])
+                                        if (!squares[chessPieceIndex.X, chessPieceIndex.Y + j].aboveChessPiece.GetOwner().isTurn)
                                         {
                                             list.Add(new Index(chessPieceIndex.X, chessPieceIndex.Y + j));
                                         }
@@ -643,7 +643,7 @@ public class GameManager : MonoBehaviour
                                     {
                                         checks_Queen[1] = true;
 
-                                        if (squares[chessPieceIndex.X + i, chessPieceIndex.Y + j].aboveChessPiece.GetOwner() != player[turn])
+                                        if (!squares[chessPieceIndex.X + i, chessPieceIndex.Y + j].aboveChessPiece.GetOwner().isTurn)
                                         {
                                             list.Add(new Index(chessPieceIndex.X + i, chessPieceIndex.Y + j));
                                         }
@@ -664,7 +664,7 @@ public class GameManager : MonoBehaviour
                                     {
                                         checks_Queen[5] = true;
 
-                                        if (squares[chessPieceIndex.X - i, chessPieceIndex.Y - j].aboveChessPiece.GetOwner() != player[turn])
+                                        if (!squares[chessPieceIndex.X - i, chessPieceIndex.Y - j].aboveChessPiece.GetOwner().isTurn)
                                         {
                                             list.Add(new Index(chessPieceIndex.X - i, chessPieceIndex.Y - j));
                                         }
@@ -685,7 +685,7 @@ public class GameManager : MonoBehaviour
                                     {
                                         checks_Queen[7] = true;
 
-                                        if (squares[chessPieceIndex.X + i, chessPieceIndex.Y - j].aboveChessPiece.GetOwner() != player[turn])
+                                        if (!squares[chessPieceIndex.X + i, chessPieceIndex.Y - j].aboveChessPiece.GetOwner().isTurn)
                                         {
                                             list.Add(new Index(chessPieceIndex.X + i, chessPieceIndex.Y - j));
                                         }
@@ -706,7 +706,7 @@ public class GameManager : MonoBehaviour
                                     {
                                         checks_Queen[3] = true;
 
-                                        if (squares[chessPieceIndex.X - i, chessPieceIndex.Y + j].aboveChessPiece.GetOwner() != player[turn])
+                                        if (!squares[chessPieceIndex.X - i, chessPieceIndex.Y + j].aboveChessPiece.GetOwner().isTurn)
                                         {
                                             list.Add(new Index(chessPieceIndex.X - i, chessPieceIndex.Y + j));
                                         }
@@ -722,30 +722,33 @@ public class GameManager : MonoBehaviour
                     }
                 }
                 break;
-            //case ChessPieceType.King:
-            //    for (int i = -1; i <= 1; i++)
-            //    {
-            //        for (int j = -1; j <= 1; j++)
-            //        {
-            //            if (i == 0 && j == 0)
-            //            {
-            //                continue;
-            //            }
+            case ChessPieceType.King:
+                for (int i = -1; i <= 1; i++)
+                {
+                    for (int j = -1; j <= 1; j++)
+                    {
+                        if (i == 0 && j == 0)
+                        {
+                            continue;
+                        }
 
-            //            try
-            //            {
-            //                if (squares[chessPieceIndex.X + i, chessPieceIndex.Y + j].aboveChessPiece.GetOwner() == player[turn])
-            //                {
-            //                    continue;
-            //                }
+                        try
+                        {
+                            if (squares[chessPieceIndex.X + i, chessPieceIndex.Y + j].aboveChessPiece.GetOwner() == player[turn])
+                            {
+                                continue;
+                            }
 
-            //                list.Add(new Index(chessPieceIndex.X + i, chessPieceIndex.Y + j));
-            //            }
-            //            catch (System.IndexOutOfRangeException) { }
-            //            catch (System.NullReferenceException) { }
-            //        }
-            //    }
-            //    break;
+                            list.Add(new Index(chessPieceIndex.X + i, chessPieceIndex.Y + j));
+                        }
+                        catch (System.IndexOutOfRangeException) { }
+                        catch (System.NullReferenceException)
+                        {
+                            list.Add(new Index(chessPieceIndex.X + i, chessPieceIndex.Y + j));
+                        }
+                    }
+                }
+                break;
             default:
                 Debug.Log("chess piece type is Normal");
                 break;
@@ -812,10 +815,16 @@ public class GameManager : MonoBehaviour
 
     public void ConfirmSelectedChessPiece()
     {
-		if (player[turn].currentChessPiece != null && player[turn].currentChessPiece != selectedChessPiece)
-		{
-			player[turn].currentChessPiece.ChangeTypeTo(ChessPieceType.Normal);
-		}
+        try
+        {
+            if (player[turn].currentChessPiece != selectedChessPiece
+                && player[turn].currentChessPiece.Type != ChessPieceType.King)
+            {
+                player[turn].currentChessPiece.ChangeTypeTo(ChessPieceType.Normal);
+            }
+        }
+        catch (System.NullReferenceException) { }
+        catch(MissingReferenceException) { }
 
 		player[turn].currentChessPiece = selectedChessPiece;
         selectedChessPiece = null;
@@ -872,6 +881,8 @@ public class GameManager : MonoBehaviour
 
     public void PerformGameOver()
     {
+        Debug.Log("game over");
+        isOver = true;
         menuUIManager.gameObject.SetActive(true);
     }
 }

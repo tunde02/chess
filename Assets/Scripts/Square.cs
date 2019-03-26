@@ -45,7 +45,7 @@ public class Square : MonoBehaviour
 	private void OnCollisionEnter(Collision collision)
 	{
         aboveChessPiece = collision.gameObject.GetComponent<ChessPiece>();
-
+        
         aboveChessPiece.state = ChessPiece.State.Stop;
 	}
 
