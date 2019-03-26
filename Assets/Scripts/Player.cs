@@ -75,12 +75,12 @@ public class Player
         chessPiece.SetOwner(this);
     }
 
-    public void AddKing(ChessPiece chessPieceKing)
-    {
-        king = chessPieceKing;
-        chessPieceKing.SetOwner(this);
-        chessPieceKing.ChangeTypeTo(ChessPieceType.King);
-    }
+    //public void AddKing(ChessPiece chessPieceKing)
+    //{
+    //    king = chessPieceKing;
+    //    chessPieceKing.SetOwner(this);
+    //    chessPieceKing.ChangeTypeTo(ChessPieceType.King);
+    //}
 
 	public void MinusChessPiece(ChessPiece chessPiece)
 	{

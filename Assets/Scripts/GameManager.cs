@@ -68,11 +68,11 @@ public class GameManager : MonoBehaviour
             {
                 Vector3 temp = squares[j, i].transform.position;
 
-                if (i == 4 && j == 0)
-                {
-                    player[0].AddKing(Instantiate(chessPieceClone, new Vector3(temp.x, temp.y + 1, temp.z), Quaternion.identity).GetComponent<ChessPiece>());
-                    continue;
-                }
+                //if (i == 4 && j == 0)
+                //{
+                //    player[0].AddKing(Instantiate(chessPieceClone, new Vector3(temp.x, temp.y + 1, temp.z), Quaternion.identity).GetComponent<ChessPiece>());
+                //    continue;
+                //}
 
                 player[0].AddChessPiece(Instantiate(chessPieceClone, new Vector3(temp.x, temp.y + 1, temp.z), Quaternion.identity).GetComponent<ChessPiece>());
             }
@@ -81,11 +81,11 @@ public class GameManager : MonoBehaviour
             {
                 Vector3 temp = squares[j, i].transform.position;
 
-                if (i == 4 && j == 7)
-                {
-                    player[1].AddKing(Instantiate(chessPieceClone, new Vector3(temp.x, temp.y + 1, temp.z), Quaternion.identity).GetComponent<ChessPiece>());
-                    continue;
-                }
+                //if (i == 4 && j == 7)
+                //{
+                //    player[1].AddKing(Instantiate(chessPieceClone, new Vector3(temp.x, temp.y + 1, temp.z), Quaternion.identity).GetComponent<ChessPiece>());
+                //    continue;
+                //}
 
                 player[1].AddChessPiece(Instantiate(chessPieceClone, new Vector3(temp.x, temp.y + 1, temp.z), Quaternion.identity).GetComponent<ChessPiece>());
             }
@@ -181,15 +181,15 @@ public class GameManager : MonoBehaviour
                 {
                     selectedChessPiece = targetChessPiece;
 
-                    if (selectedChessPiece.Type == ChessPieceType.King)
-                    {
-                        player[turn].currentChessPiece = selectedChessPiece;
-                        selectedChessPiece = null;
-                        isConfirmed = true;
-                        UpdatePossibleSquares(player[turn].currentChessPiece);
-                    }
-                    else
-                    {
+                    //if (selectedChessPiece.Type == ChessPieceType.King)
+                    //{
+                    //    player[turn].currentChessPiece = selectedChessPiece;
+                    //    selectedChessPiece = null;
+                    //    isConfirmed = true;
+                    //    UpdatePossibleSquares(player[turn].currentChessPiece);
+                    //}
+                    //else
+                    //{
                         if (player[turn].currentChessPiece != null)
                         {
                             selectUIManager.OpenUI(player[turn].GetChessPieceRemains(), player[turn].currentChessPiece.Type);
@@ -198,7 +198,7 @@ public class GameManager : MonoBehaviour
                         {
                             selectUIManager.OpenUI(player[turn].GetChessPieceRemains(), ChessPieceType.Normal);
                         }
-                    }
+                    //}
                 }
                 else
                 {
@@ -275,21 +275,24 @@ public class GameManager : MonoBehaviour
                         }
                     }
 
-                    // 상대 말을 잡을 수 있는 경우
-                    Index leftCase = new Index(turn == 0 ? chessPieceIndex.X + 1 : chessPieceIndex.X - 1, chessPieceIndex.Y - 1); ;
-                    Index rightCase = new Index(turn == 0 ? chessPieceIndex.X + 1 : chessPieceIndex.X - 1, chessPieceIndex.Y + 1); ;
+					try
+					{
+						// 상대 말을 잡을 수 있는 경우
+						Index leftCase = new Index(turn == 0 ? chessPieceIndex.X + 1 : chessPieceIndex.X - 1, chessPieceIndex.Y - 1); ;
+						Index rightCase = new Index(turn == 0 ? chessPieceIndex.X + 1 : chessPieceIndex.X - 1, chessPieceIndex.Y + 1); ;
 
-                    if (IsChessPieceThere(leftCase)
-                            && !squares[leftCase.X, leftCase.Y].aboveChessPiece.GetOwner().isTurn)
-                    {
-                        list.Add(leftCase);
-                    }
+						if (IsChessPieceThere(leftCase)
+								&& !squares[leftCase.X, leftCase.Y].aboveChessPiece.GetOwner().isTurn)
+						{
+							list.Add(leftCase);
+						}
 
-                    if (IsChessPieceThere(rightCase)
-                        && !squares[rightCase.X, rightCase.Y].aboveChessPiece.GetOwner().isTurn)
-                    {
-                        list.Add(rightCase);
-                    }
+						if (IsChessPieceThere(rightCase)
+							&& !squares[rightCase.X, rightCase.Y].aboveChessPiece.GetOwner().isTurn)
+						{
+							list.Add(rightCase);
+						}
+					} catch(System.IndexOutOfRangeException) { }
                 }
                 break;
 			case ChessPieceType.Rook:
@@ -719,30 +722,30 @@ public class GameManager : MonoBehaviour
                     }
                 }
                 break;
-            case ChessPieceType.King:
-                for (int i = -1; i <= 1; i++)
-                {
-                    for (int j = -1; j <= 1; j++)
-                    {
-                        if (i == 0 && j == 0)
-                        {
-                            continue;
-                        }
+            //case ChessPieceType.King:
+            //    for (int i = -1; i <= 1; i++)
+            //    {
+            //        for (int j = -1; j <= 1; j++)
+            //        {
+            //            if (i == 0 && j == 0)
+            //            {
+            //                continue;
+            //            }
 
-                        try
-                        {
-                            if (squares[chessPieceIndex.X + i, chessPieceIndex.Y + j].aboveChessPiece.GetOwner() == player[turn])
-                            {
-                                continue;
-                            }
+            //            try
+            //            {
+            //                if (squares[chessPieceIndex.X + i, chessPieceIndex.Y + j].aboveChessPiece.GetOwner() == player[turn])
+            //                {
+            //                    continue;
+            //                }
 
-                            list.Add(new Index(chessPieceIndex.X + i, chessPieceIndex.Y + j));
-                        }
-                        catch (System.IndexOutOfRangeException) { }
-                        catch (System.NullReferenceException) { }
-                    }
-                }
-                break;
+            //                list.Add(new Index(chessPieceIndex.X + i, chessPieceIndex.Y + j));
+            //            }
+            //            catch (System.IndexOutOfRangeException) { }
+            //            catch (System.NullReferenceException) { }
+            //        }
+            //    }
+            //    break;
             default:
                 Debug.Log("chess piece type is Normal");
                 break;
@@ -777,10 +780,13 @@ public class GameManager : MonoBehaviour
 
     private bool IsChessPieceThere(Index index)
     {
-        if (squares[index.X, index.Y].aboveChessPiece == null)
-        {
-            return false;
-        }
+		try
+		{
+			if (squares[index.X, index.Y].aboveChessPiece == null)
+			{
+				return false;
+			}
+		} catch(System.IndexOutOfRangeException) { }
 
         return true;
     }
@@ -820,14 +826,17 @@ public class GameManager : MonoBehaviour
 
     public void CancelSelectedChessPiece()
     {
-        // 타입이 정해져있던 Chess Piece를 클릭해서 타입을 바꾸다가,
-        // 취소하면 원래 타입으로 되돌아가야한다.
-        if (selectedChessPiece.Type != ChessPieceType.King)
-        {
-            selectedChessPiece.ChangeTypeTo(ChessPieceType.Normal);
-        }
+		// 타입이 정해져있던 Chess Piece를 클릭해서 타입을 바꾸다가,
+		// 취소하면 원래 타입으로 되돌아가야한다.
 
-        if (isConfirmed)
+		//if (selectedChessPiece.Type != ChessPieceType.King)
+		//{
+		//    selectedChessPiece.ChangeTypeTo(ChessPieceType.Normal);
+		//}
+
+		selectedChessPiece.ChangeTypeTo(ChessPieceType.Normal);
+
+		if (isConfirmed)
         {
             player[turn].currentChessPiece.ChangeTypeTo(selectUIManager.GetPrevChessPieceType());
             UpdatePossibleSquares(player[turn].currentChessPiece);
