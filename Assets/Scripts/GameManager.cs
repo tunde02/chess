@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
 public class Index
 {
@@ -236,7 +237,7 @@ public class GameManager : MonoBehaviour
             UpdatePossibleSquares(selectedChessPiece);
         }
     }
-
+	
     private void UpdatePossibleSquares(ChessPiece chessPiece)
     {
         ResetPossibleSquares();
@@ -837,12 +838,7 @@ public class GameManager : MonoBehaviour
     {
 		// 타입이 정해져있던 Chess Piece를 클릭해서 타입을 바꾸다가,
 		// 취소하면 원래 타입으로 되돌아가야한다.
-
-		//if (selectedChessPiece.Type != ChessPieceType.King)
-		//{
-		//    selectedChessPiece.ChangeTypeTo(ChessPieceType.Normal);
-		//}
-
+		
 		selectedChessPiece.ChangeTypeTo(ChessPieceType.Normal);
 
 		if (isConfirmed)
